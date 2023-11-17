@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'human_resource/index.js' %}"></script>
+    <style>
+        body {
+            background-color:rgb(161, 146, 135);    
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction:column;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-items: stretch;
+            align-content: stretch;  
+
+       
+
+        }
+        .admin-page, .prm{
+            position:fixed; 
+            z-index: 1;
+            width: 95%;
+            height: 10%;
+            margin-left: 2%;
+            margin-right: 2%;
+            background-color: rgb(212, 113, 37);
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 2%;
+            margin-top: 0%;
+            /* margin-bottom: 10px; */
+
+        }
+.admin-container{
+    position: absolute;
+    display: flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    height: 100%; 
+    width:95%;
+    margin-top: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+   
+}
+.admin-left{
+    position: fixed;
+   
+    background-color: rgb(133, 86, 86); 
+    width: 15%;
+   height:40%;
+   margin-top: 2%;
+   margin-right:1%;
+  
+   
+}
+.left-container{
+    position: absolute;
+    display: flex;
+    flex-direction:column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    margin:2px
+}
+.new-form{
+    position: relative;
+    margin:2%;
+}
+.new-input{
+    width:95%;
+}
+.updt-rate{
+    position:relative;
+    cursor: pointer;
+    font-size:100%;
+    width: 90%;
+    margin-top:4%;
+    padding:6%;
+    /* color: white; */
+   
+}
+
+
+.to-home{
+    position: relative;
+    text-decoration: none;
+    font-size:100%;
+    background-color:darkgreen;
+    width: 50%;
+    height: 100%;
+    margin-top: 10%;
+    margin-left: 2%;
+    padding:4%;
+    color:white;
+    
+}
+
+.admin-right{
+    position: absolute;
+     left: 15%; 
+    /* background-color:white; */
+    color:black;
+    width: 80%;
+    margin-top:2%;
+    margin-left: 1%;
+    /* height: 100%; */
+    /* height:fit-content; */
+    
+}
+.adm-dtl{
+    position: relative;
+    display: flex;
+    flex-direction:column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    width: 98%;
+    height: 40%;
+    /* background-color:#c49170;    */
+    border-radius: 5px;
+    padding:4px;
+    margin:4px;
+    box-shadow: #8e5e3e;
+     border-color:orange solid ; 
+    border-style: solid ;
+   
+  
+   
+}
+.adm-first{
+    position:relative;
+    display: flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch; 
+    /* background-color: yellow;  */
+    width: 100%;
+    height: 50%;
+    margin:1%;
+    
+}
+.adm-photo{
+  position: relative;
+  /* background-color: #eab1b1; */
+  width: 30%;
+  height: 20%;
+}
+#adm-img{
+    width:50%;
+    height: 20%;
+}
+.adm-prof{
+    position: relative;
+    display: flex;
+    flex-direction:column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch; 
+     /* background-color: #8e5e3e; */ 
+    width: 70%;
+    height: 40%;
+}
+.adm-name,.adm-hired,.adm-dept,.adm-job{
+width:70%;
+height: 10%;
+background-color:rgb(212, 113, 37);
+margin:1%;
+}
+.adm-second{
+    position:relative;
+    display: flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    /* background-color: red; */
+    width: 100%;
+    height: 50%;
+    /* color: aliceblue; */
+    margin:1%;
+}
+.adm-data{
+    position:relative;
+    display: flex;
+    flex-direction:column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    /* background-color: aqua; */
+    width: 55%;
+    height: 40%;
+    /* margin-top: 5px;
+    margin-bottom: 5px; */
+}
+.adm-hour,.adm-rate,.adm-salary,.adm-edit,.status-false,.status-true,.status-none{
+width:90%;
+height: 10%;
+background-color:rgb(11, 142, 203);
+margin:1%; 
+}
+.adm-chrt{
+ position: relative;
+  background-color:antiquewhite;
+  width: 30%;
+  height: 40%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+    </style>
+</head>
+<body>
+    {% csrf_token %}
+    {% if user.is_superuser and user.is_authenticated%}
+<div class="admin-page">Adminstrational Page</div>
+
+<div class="admin-container">
+
+
+<div class="admin-left">
+           <div class="left-container">
+           <div class="updt-rate"> Update Wage rate</div>
+                        <form class="new-form" action="" cynctype="multipart/form-data">
+                            <input class="new-input" name="rate" type="number" placeholder="update wage rate" required>
+                            <input class="new-submit" type="submit" value="update">
+                        </form>
+                                            
+          
+
+                       <a class="to-home" href="{% url 'index'%}">Go to Home</a>
+           </div>
+</div>
+
+<div class="admin-right">
+
+        <!-- <div class="adm-dtl">
+
+                <div class="adm-first">
+                        <div class="adm-photo">photo div wher is it </div> 
+
+                        <div class="adm-prof">
+                            <div class="adm-name">neme    </div> 
+                            <div class="adm-hired">hired   </div>
+                            <div class="adm-dept">dpt     </div> 
+                            <div class="adm-job">job     </div>
+                        </div>
+               </div>
+               <div class="adm-second">
+                        <div class="adm-data">
+                        
+                                <div class="adm-onwork">onwork</div>
+                                <div class="adm-onleave">onleave</div>
+                                <div class="adm-hour">hour</div>
+                                <div class="adm-rate">rate</div> 
+                                <div class="adm-salary">salary</div> 
+                        </div>
+                        <div class="adm-chrt">chart </div>    
+                </div>
+        </div> -->
+</div>
+
+</div>   
+    {% else %}
+
+
+ <div class="prm"> YOU HAVE NO ACCESS PERMISSION </div> 
+    {% endif %}
+</body>
+</html>

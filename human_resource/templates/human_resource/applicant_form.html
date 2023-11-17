@@ -1,0 +1,22 @@
+
+{% extends 'human_resource/base.html' %}
+
+{% block container %}
+<h3>New Employee Application Form </h3>
+<div class="apl-form-div">
+<form id="apl-form">  
+  {% csrf_token %}
+  First Name: <br> <input name="firstname"  id="first-name" type="text" placeholder="first name"><br>
+  Second Name: <br> <input name="secondname" id="second-name" type="text" placeholder="second name"><br>
+  Last Name: <br> <input name="lastname" id="last-name" type="text" placeholder="last name"><br>
+  Age: <br> <input name="age" id="age" type="number" placeholder="age"><br>  
+  Date hired: <br> <input name="hiredate" id="hiredate" type="date" ><br>
+  department: <br> <input name="department" id="department" type="text" placeholder="departement"><br>
+  Job Title: <br> <input name="job" id="job" type="text" placeholder="Job Title"><br>
+  salary: <br> <input name="salary" id="salary" type="number" placeholder="salary amount"><br>
+  work experience : <br> <input name="work" id="work" type="text" placeholder="work experience"><br>  
+ 
+  <input id="submit-btn-apl" type="submit" value="submit form"> 
+</form>
+</div>
+{% endblock%}

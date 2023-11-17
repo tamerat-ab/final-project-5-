@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <!-- <link rel="stylesheet" href="{% static 'human_resource/hr.css' %}"> -->
+    <script src="{% static 'human_resource/index.js' %}"></script>
+    <style>
+        body{  
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: url('static/human_resource/green.jpg') no-repeat fixed;
+             /* background-color: blue; */
+             opacity: .8;
+        }
+        img{ height:400px; width:400px}
+
+        .nav-front-page{background-color: rgb(227, 180, 25);
+         width:97%;
+         height: 15%;
+        margin-right:2%;
+        padding-right: 2%;
+        position:relative;
+        text-align: center;
+        font-size: 40px;}
+        .div-front-page{background-color: rgb(193, 49, 59);
+                       /* margin:auto;
+                       width: 400px;
+                       height: auto;
+                       margin-top: 50px;
+                       padding-left: 20px;
+                        padding-right: 20px;
+                        padding-top: 5px;
+                        padding-bottom: 5px; */
+                        width:40%; 
+                        padding: 3%;
+                        margin-left: 50%;
+                        margin-top: 1%;
+                        border: 5% solid black;
+                        border-radius: 5%;
+                        
+                        /* left:55% */
+
+                    }
+                    #reg{
+                        text-decoration: none;
+                        /* text-decoration-style: none; */
+                        padding-left: 20px;
+                        padding-right: 20px;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                    }
+                    #user-reg,#email-reg,#password-reg,#confirm-reg,#first_reg,#last-reg,#submit-reg{
+                        position:relative;
+                        width:55%;  
+                        margin-left: 1%; 
+                        margin-right: 20%;
+                        cursor: pointer;
+                        font-weight:900;
+                        color:black;
+                        /* margin-left: 30%;
+                        margin-right: 70%; */
+                    }
+
+    </style>
+
+</head>
+<body>
+    <!-- <img src="{% static 'human_resource/green.jpg' %}" alt="pic"> -->
+   <nav class="nav-front-page", id="front-page">Welcome To The HR-Tool</nav>
+  
+
+   
+         <div class="div-front-page" id="div"> 
+                        <h1>{{message}} </h1>
+                    <form id="login-form" action="{% url 'user_login' %}" method="post">
+                        {% csrf_token %}
+                    Username: <input type="text" placeholder="username" name="username"><br>
+                    Password: <input type="password" placeholder="password" name="password"><br>
+                    <input id="login-sbt" type="submit" value="login">
+                    </form>
+
+         <button id="reg" href="">New Registration </button>
+
+         <div class="class-reg" id="id-reg">
+             
+                     
+                    <form id="form-reg" action="{% url 'user_register' %}" method="post" action>
+                        {% csrf_token %}
+                    Username: <br> <input type="text" name="username" id="user-reg" ><br>
+                    Email: <br> <input type="email" name="email" id="email-reg" ><br>
+                    First name: <br> <input type="text" name="first_name" id="first_reg" ><br>
+                    Last Name: <br> <input type="text" name="last_name" id="last-reg" ><br>
+                    password: <br> <input type="password" name="password1" id="password-reg" ><br>
+                    confirm password: <br> <input type="password" name="confirm" id="confirm-reg" ><br>
+                   <br> <input type="submit" id="submit-reg" value="register Now" >
+             
+         </div>
+      </div>
+
+  
+
+</body>
+</html>

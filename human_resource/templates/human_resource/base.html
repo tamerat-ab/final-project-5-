@@ -1,0 +1,788 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="refresh" content="2"> refreshes a page in the second interval specified in the content -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="{% static 'human_resource/index.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    {% block scripts %} {% endblock %}
+   <style>
+    body {
+            position: absolute;
+            /* height: 100%; */
+            width: 100%;
+            background-color:rgb(161, 146, 135);
+            min-height: 100%;
+            margin: 0;
+    }
+.main-container{
+  width: 95%; 
+      
+      /* height: 100%; */
+      min-height: 100%;  
+      display: flex;
+      flex-direction:column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      margin-top: 0%; 
+      /* position:absolute; */
+       position:fixed; 
+      margin-left: 3%;
+      /* border: 2% solid; */
+      z-index: 2; 
+      /* background-color: rgb(192, 215, 19); */
+}
+    .nav-div {
+              top:0%;
+              position: relative;
+              min-height: 10%;
+             
+              /* height: 10%;  */
+              width: 100%;
+              margin-bottom: 1%; 
+              margin-top: 1%; 
+              z-index: 1;
+              /* position: relative;  */
+              /* border: 2px solid; */
+              /* background-color: brown;  */
+    }
+  #navbarSupportedContent{
+         background-color: rgb(212, 113, 37);
+   
+  }
+  .navbar-brand{
+        background-color: #3e8e41;
+        font-weight: bold;
+        padding: 1%;
+      
+  }
+  .navbar{
+   
+        width: 100%;
+        height: 100%;
+        background-color: rgb(134, 124, 114);
+        z-index: 1;
+  }
+  .nav-link{
+        color:#15821c;
+        font-style:normal;
+        font-weight:bold
+    
+  }
+
+  
+.section1{
+     
+      width: 95%;
+      display: flex;
+      flex-direction:row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;   
+      /* height: 29%; */
+      min-height: 25%;
+      /* margin-top:80%; */
+      /* top:12%; */
+      margin-bottom: 0%;
+      left: 3%;
+      position: relative;
+      background-color:aliceblue;
+      opacity: .8;
+      border: 2% solid;
+      margin-top:0% ;
+      z-index: 1;
+     
+   }
+
+#img-div{
+      width: 40%;
+      height: 40%;
+}
+.profile-pic-container{
+      height: auto;
+      width: auto;
+      display:flex;
+      flex-direction: column;
+}
+.update-pic{
+     margin-top: -20px;
+     cursor: pointer;
+     padding-bottom: -20px;
+     background-color: #4CAF50;
+     width: 50%;
+     text-align: center;
+     font-weight: 900;
+}
+.div-upld{
+  margin-bottom: 0%;
+}
+.update-div-pic{
+     margin-top: -2px;
+     /* padding-top: 20px; */
+}
+.section2{ 
+      width: 95%; 
+      /* height: 100%; */
+      min-height: 95%;  
+      display: flex;
+      flex-direction:row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      margin-top: 1%; 
+      position: relative;
+      margin-left: 3%;
+      /* border: 2% solid; */
+     
+ 
+      
+    }
+
+  
+  /* #navbarSupportedContent{
+    background-color: red;
+  } */
+   .profile-pic{
+    width: 25%;
+    /* background-color: yellow;  */
+    /* border: 2px solid black; */
+    /* border-right-color:white; */
+  
+   }
+
+ 
+
+   .index-left{
+    width: 25%;
+    /* height: 100%; */
+    min-height: 100%;
+    margin: 0;
+    position:relative;
+    /* background-color:beige; */
+    /* border: 2px solid;  */
+   }
+
+   .index-middle{
+    width:50%;
+    position: relative;
+    /* height: 100%; */
+    min-height: 100%;
+    /* margin-left:25% ; */
+    scroll-behavior:smooth;
+    overflow-y: scroll;
+    
+
+    /* background-color: burlywood; */
+    /* border: 2px solid; */
+   }
+
+   .index-right{
+    position: relative;
+    width: 25%;
+    /* height: 100%; */
+    min-height: 100%;
+    margin: 0;
+    /* background-color: blue;  */
+    /* border: 2px solid;
+    border-right: 2px solid;
+    border-left: aliceblue; */
+   }
+
+.container {
+      border: 2px solid #dedede;
+      background-color: #82c897;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+}
+
+/* Darker chat container */
+.container-darker {
+  border: 2px solid #dedede;
+  background-color: #aaa;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+/* Clear floats */
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Style images */
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+ 
+ 
+}
+.container-darker img {
+  float: right;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+ 
+ 
+}
+
+/* Style the right image */
+/* .container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+} */
+
+
+/* Style time text */
+.time-right {
+  float: right;
+  color: #821515;
+}
+
+/* Style time text */
+.time-left {
+  float: left;
+  color: #941e1e;
+}
+/* end of sidebar css */
+
+.chat-div{
+   position: relative;
+  
+  border: aliceblue;
+  display: flex;
+  flex-direction:row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;    
+  /* height: auto;  */
+  margin-top:1%;  
+  margin-left: 3%;
+  margin-right: 3%; 
+   width: 100%; 
+  height: 100%;
+  /* z-index: 2;  */
+ 
+  
+
+  /* width: 80%; */
+  /* height: 80% */
+
+}
+.chat-container{
+  position: relative;
+  background-color: #999;
+  border: #f1f1f1;
+  display: flex;
+  flex-direction:column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;   
+   /* height: auto; */
+  margin: auto; 
+  /* height: 100%; */
+  width: 100%;
+   z-index: 1;
+  /* right: 100%;  */
+  min-width: 80px; 
+  /* box-shadow: #82c897; */ 
+}
+.chat-header,.chat-flex {
+  display: flex;
+  flex-direction:column;
+  position: relative;
+  width: 100%;
+  height:40px;
+  background-color:rgb(21, 200, 108);
+  color:bisque;
+  cursor: pointer;
+}
+#chat-flex{
+ margin-top: 81%;;
+  margin-bottom: 2px;
+  text-align: center;
+}
+.chat-form{
+  width: 100%;
+  height: auto;
+  background-color:rgb(130, 115, 96);
+}
+.chat-textarea{
+  width: 100%;
+  background-color:rgb(133, 136, 135);
+}
+.chat-submit,.focus{
+  background-color: green;
+  cursor: pointer;
+}
+.scroll {
+            max-height: 200px;
+            overflow: scroll; 
+            overflow-y:scroll;  
+            background-color:aliceblue;
+
+            /* width: 400px;
+            height: 120px; */
+            /* overflow-x: scroll; */
+            display: flex;
+            flex-direction:column   
+            /* scroll-behavior: auto; */ 
+            
+        }
+.leave{
+       /* background-color: rgb(188, 128, 94); */
+       height: 100%;
+      width: 100%;}
+.leave-main,.stat,.time-keeping, .admin-only,#link-a{
+  cursor: pointer;
+  background-color:rgb(212, 113, 37);
+  margin-top: 5%;
+  width: 80%;
+  height: 40px;
+  margin-left: 5%;
+  color: aliceblue;
+  text-align: center;
+  position:relative;
+  font-size:100%;
+}
+#admin-only{
+  color:aliceblue;
+  text-decoration: none;
+}
+.reason,.leave-period,.date,#age,#first-name,#second-name,#last-name,#department,#salary,#job,#hiredate,#work,#submit-btn-apl{
+  /* margin-top: 0%; */
+  position:relative;
+   width:55%;  
+   margin-left: 1%; 
+  margin-right: 20%;
+  cursor: pointer;
+   /* margin-top: px; */
+}
+
+#leave-form-submit{
+ margin-left: 1%;
+} 
+.leave-btn-ask,.leave-btn-back{
+  width: 100%;
+  height: 20%;
+  background-color:rgb(1, 140, 42);
+}
+.onleave-show{
+  color:aliceblue;
+  text-align: center
+}
+/* chart starts here */
+.chart{width: 80%;
+       height: 50%;}
+/* chart ends here */
+.dropbtn {
+  background-color:green;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+.dropbt:hover{background-color:rgb(212, 113, 37);}
+/* user-mini starts here */
+.user-mini{
+  position: absolute;
+  width:20%;
+  height:100%;
+  background-color: rgb(212, 113, 37);
+}
+
+.user-mini {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.user-mini:hover .dropdown-content {
+  display: block;
+}
+
+/* dropdown starts here */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: absolute;
+  display: inline-block;
+  margin-left: 50%;
+
+ 
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+ 
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color:rgb(212, 113, 37);
+}
+
+/* user-detail content starts here */
+/* Style The Dropdown Button */
+.dtl-btn {
+  background-color:#15821c;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.user-dtl {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dtl-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dtl-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dtl-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.user-dtl:hover .dtl-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.user-dtl:hover .dtl-btn {
+  background-color: #3e8e41;
+}
+
+#dtl-profile{
+  /* width:200px;
+  height: 200px; */
+  background-color:rgb(212, 113, 37);
+  width:250px;
+  height: auto;
+  /* text-align: center; */
+  /* padding-left: 9%; */
+}
+/* #reciever-img,#sender-img {
+  width:10%;
+  height: 10%;
+} */
+
+/* time keeping starts here */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+/* time keeping ends here */
+
+/* user image starts here */
+
+
+.chat-img{
+  height: 100px;
+  width: 100px;
+  align-items: center;
+  margin-left: 40px;
+}
+.dtl-btn{
+  width: 150px;
+ border-color: #eab1b1;
+ margin-top: 1px;
+}
+#job,#department,#name,#hired{
+  text-align: justify;
+  text-overflow: clip;
+  margin-left: 10px;
+  font-style: oblique;
+  font-weight: bolder;
+}
+/* user image ends here */
+
+/* chat details starts here */
+#header-img{
+  /* width: 30%;
+  height: 95%;
+  border-radius: 70px; */
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+/* @keyframes animate {0%{left:0;} 25%{left:20%;} 50%{left:0;}} */
+
+/* The element to apply the animation to */
+.animation { 
+  width: 100%; 
+  height: 40%; 
+  position: relative;
+ 
+  animation-name: animate;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  color:rgb(234, 105, 6);
+  font-size: larger;
+  margin-top:25%; 
+  text-align:center; 
+  margin-left:3%;
+
+  border-radius: 3%;
+ 
+} 
+#myChart{
+  margin-left:10%;
+  width: 40%;
+}
+.total-salary,.total-hour, .leave-cond,.wage-rate,.wage-update{
+  margin-left:10%;
+  color:aliceblue;
+  background-color: #3e8e41;
+  margin-top: 2%;
+  height: 15%;
+  text-align: center;
+}
+
+
+    </style>
+</head>
+
+<body>
+
+
+ {% if user.is_authenticated %} 
+
+
+<div class="nav-div">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+                <a class="navbar-brand" href="#">HR-management</a>
+                 
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                          <ul class="navbar-nav mr-auto">
+
+                                  <li class="nav-item active">
+                                    <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                                  </li>
+
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'user_logout' %}">logout</a>
+                                  </li>
+
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="">{{user.first_name}}</a>
+                                  </li>
+                       
+                          </ul>
+                        
+                </div>
+      </nav> 
+</div>
+
+
+
+
+<section class="main-container">
+    <section class="section1">
+              <div class="profile-pic">
+                {% block picture %}
+                {% endblock%}
+              </div>
+              <div class="message-bar"> 
+                {% block message %} {% endblock %}
+
+              </div>
+    </section>
+    <section class="section2">
+              <div class="index-left">
+                {% block sidebar-profile%} {% endblock%}
+              </div>
+              <div class="index-middle">
+                {% block container %}
+                {% endblock %}
+              </div>
+              <div class="index-right">
+                {% block sidebar%} {% endblock %}
+              </div>
+     </section>
+
+  
+ </section>
+
+{% else %}
+
+{% include 'human_resource/front_page.html' %}
+
+{% endif %}
+</body>
+</html>
+
+<!-- 
+<div class="nav-div">
+
+  <nav class="navbar">    -->
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light"> -->
+
+              <!-- <a class="navbar-brand" href="#">HR-management</a>
+               
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+
+                          <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                          </li>
+
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'user_logout' %}">logout</a>
+                          </li>
+
+                          <li class="nav-item">
+                            <a class="nav-link" href="">{{user.first_name}}</a>
+                          </li> -->
+                          <!-- <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="#">Action</a>
+                              <a class="dropdown-item" href="#">Another action</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                          </li> -->
+                          <!-- <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Disabled</a>
+                          </li> -->
+                        <!-- </ul> -->
+                        <!-- <form class="form-inline my-2 my-lg-0">
+                          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form> -->
+              <!-- </div> -->
+    <!-- </nav>  -->
+    <!-- </nav> -->
+
+<!-- </div> --> 

@@ -1,0 +1,181 @@
+
+
+{% extends 'human_resource/base.html' %}
+ 
+{% block picture%}
+
+{{ request.user.id|json_script:"user_id" }}
+{{request.user.username|json_script:"user_username" }}
+{% csrf_token %}
+<div class="profile-pic-container">
+<!-- <div id="user-image"></div> -->
+
+<div id="div-upld">  </div> <br>
+<div class="update-pic"> Change Photo</div>
+      <div class="update-pic-div">
+
+            <form class="newphoto" method="POST" action="{% url 'new_picture' %}" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form.photo }}
+              <input class="sbt-newphoto" type="submit" value="Upload">
+            </form>
+
+      </div>
+
+</div>
+{% endblock %}
+
+{% block sidebar-profile%}
+<div class="sidebar-index">
+    <div class="leave-main" id="leave-main">Go to leave request page </div> <br>
+    <div class="stat" id="stat"> your statstics here</div>
+    <div class="time-keeping" id="time-keeping"> time keeping </div>
+  
+
+
+    {% if user.is_superuser %}
+    <div class="admin-only"> <a id="admin-only"  href="{% url 'admin_user' %}"> Go To Time keeping Page </a></div>
+    {% endif %}
+</div>
+
+
+
+
+{% endblock%}
+
+{% block message %}
+<!-- float and overflow have to be read -->
+<div class="dropdown">
+  <button class="dropbtn">Employee Conatacts</button>
+  <div class="dropdown-content">
+      
+            <!-- <div class="user-dtl">
+                <button class="dtl-btn">USERS</button>
+                <div class="dtl-content">
+                     <div> user 1</div>
+          
+               </div>
+           </div> -->
+     
+    <!-- <a href="#">Link 2</a>
+    <a href="#">Link 3</a> -->
+  </div>
+</div>
+
+<div class="animation"> </div>
+
+{% endblock %}
+
+{% block container %}
+
+<div class="apl-form-div">
+<h3>New Employee Application Form </h3>
+<form id="apl-form">  
+  {% csrf_token %}
+  First Name: <br> <input name="firstname"  id="first-name" type="text" placeholder="first name"><br>
+  Second Name: <br> <input name="secondname" id="second-name" type="text" placeholder="second name"><br>
+  Last Name: <br> <input name="lastname" id="last-name" type="text" placeholder="last name"><br>
+  Age: <br> <input name="age" id="age" type="number" placeholder="age"><br>  
+  Date hired: <br> <input name="hiredate" id="hiredate" type="date" ><br>
+  department: <br> <input name="department" id="department" type="text" placeholder="departement"><br>
+  Job Title: <br> <input name="job" id="job" type="text" placeholder="Job Title"><br>
+  salary: <br> <input name="salary" id="salary" type="number" placeholder="salary amount"><br>
+  work experience : <br> <input name="work" id="work" type="text" placeholder="work experience"><br>  
+ 
+  <input id="submit-btn-apl" type="submit" value="submit form"> 
+</form>
+
+</div>
+
+<div class="apl-clone-div"></div>
+
+
+<div class="leave" id="leave">
+           <div class="onleave-show"></div>
+         <button class="leave-btn-ask">Ask For Leave </button> <button class="leave-btn-back">Back on work</button>
+          <form class="leave-form" id="leave-form" action="">
+              Reason: <br><input  name="reason" class="reason" type="text" placeholder="state your reason for leave here"><br>
+              For how long: <br><input name="leave-date" class="leave-period" type="number" placeholder="only numbers"> <br>
+              date leave required:  <br><input name="date" class="date" type="date" > <br>
+              <input class="leave-from-submit" id="leave-form-submit"  type="submit" value="Send your leave form">
+          </form>
+         <div class="onleave"></div>
+         
+</div>
+
+<div class="time-keeping-div">
+       <div class="server-time"></div>
+      
+       <label class="switch">
+        <input type="checkbox" id="ck1" onchange="save()">
+        <span class="slider round hide-off">ON</span>
+        
+        </label>
+        
+ 
+        
+
+</div>
+
+<div class="chart", id="chart">
+  <canvas id="myChart"></canvas>
+  <div class="total-hour">Total Hours Scored: </div>
+  <div class="total-salary">Total Salary Scored: </div>
+  <div class="wage-rate">Current Wage-Rate: </div>
+  <div class="wage-update">last updated wage-rate: </div>
+  <div class="leave-cond"></div>
+
+  
+
+    <!-- <div class="hideme">Please hide me, but bring me back later </div> -->
+
+</div>
+
+{% endblock %}
+
+
+{% block sidebar %}
+   <div class="chat-div">
+
+   <!-- <div class="chat-container " id="chat-cont"> -->
+           <!-- <div class="chat-header" id="ch-header-id">chat</div> -->
+
+          <!-- <div class="scroll" autofocus> -->
+
+                    <!-- <div class="container">
+                      <img src="" alt="Avatar">
+                      <p>Hello. How are you today?</p>
+                      <span class="time-right">11:00</span>
+                    </div>
+                    
+                    <div class="container darker">
+                      <img src="" alt="Avatar" class="right">
+                      <p>Hey! I'm fine. Thanks for asking!</p>
+                          <span class="time-left">11:01</span>
+                  </div>
+
+                    <div class="container darker">
+                      <img src="" alt="Avatar" class="right">
+                      <p>Hey! I'm fine. Thanks for asking!</p>
+                      <span class="time-left">11:01</span>
+                  </div>
+
+                    <div class="container darker"autofocus>
+                      <img src="" alt="Avatar" class="right">
+                      <p>Hey! I'm fine. Thanks for asking!</p>
+                      <span class="time-left">11:01</span>
+                    </div> -->
+                      
+            <!-- </div> -->
+         
+            <!-- <form action="" class="chat-form" id="ch-form-id">
+              <textarea name="" id="ch-textarea-id" class="chat-textarea" cols="" rows="">type text...</textarea> <br>
+              <input type="submit" value="send" class="chat-submit" id="chat-submit-id">
+            </form>
+   </div> -->
+</div>
+ 
+
+
+{% endblock %}
+
