@@ -135,44 +135,33 @@
 
 
 {% block sidebar %}
-   <div class="chat-div">
+ <div class="chat-div">
 
-   <!-- <div class="chat-container " id="chat-cont"> -->
-           <!-- <div class="chat-header" id="ch-header-id">chat</div> -->
+    <div id="chat-cont" class="chat-container">
+         <div id="ch-header-id" class="chat-header">
+               <img id="header-img" src="" alt="">
+         </div>
+             <div class="container">
+                <img id="sender-img" src="" alt="">
+                <p id="sender-msg"></p>
+                <span id="time-right" class="time-right"></span>
+              </div>
+              <div class="container-darker">
+                <img id="reciever-img" src="" alt="">
+                <p id="reciever-msg"></p>
+                <span id="time-left" class="time-right"></span>
+              </div>
+    
+         <div class="scroll"> 
+             
+         </div>
+                  <form  id="ch-form-id" class="chat-form" synctype="multipart/form-data">
+                      <textarea name="message" id="ch-textarea-id" class="chat-textarea"></textarea>
+                      <input type="submit" value="send" class="chat-submit"></input>
+                  </form>
+    </div>
 
-          <!-- <div class="scroll" autofocus> -->
-
-                    <!-- <div class="container">
-                      <img src="" alt="Avatar">
-                      <p>Hello. How are you today?</p>
-                      <span class="time-right">11:00</span>
-                    </div>
-                    
-                    <div class="container darker">
-                      <img src="" alt="Avatar" class="right">
-                      <p>Hey! I'm fine. Thanks for asking!</p>
-                          <span class="time-left">11:01</span>
-                  </div>
-
-                    <div class="container darker">
-                      <img src="" alt="Avatar" class="right">
-                      <p>Hey! I'm fine. Thanks for asking!</p>
-                      <span class="time-left">11:01</span>
-                  </div>
-
-                    <div class="container darker"autofocus>
-                      <img src="" alt="Avatar" class="right">
-                      <p>Hey! I'm fine. Thanks for asking!</p>
-                      <span class="time-left">11:01</span>
-                    </div> -->
-                      
-            <!-- </div> -->
-         
-            <!-- <form action="" class="chat-form" id="ch-form-id">
-              <textarea name="" id="ch-textarea-id" class="chat-textarea" cols="" rows="">type text...</textarea> <br>
-              <input type="submit" value="send" class="chat-submit" id="chat-submit-id">
-            </form>
-   </div> -->
+ 
 </div>
  
 

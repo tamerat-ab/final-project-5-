@@ -700,16 +700,6 @@ console.log(document.getElementById('apl-clone'))
 
 function all_users(){
                                                     //  will be comming to here later very important
-  // if(localStorage.getItem('content'))
-  // // //  {const chart=document.querySelector('.chart');
-  // // //    chart.innerHTML=localStorage.getItem('content')}
-  //  {const chat_div=document.querySelector('.chat-div');
-  //    chat_div.innerHTML=localStorage.getItem('content')
-  //    const local=document.querySelector('.chat-div')
-  //    console.log(document.querySelector('.chat-header'));
-  //    console.log(chat_div.innerHTML)}
- 
-
   fetch('all_users') // fetchs all information about all users
   
   .then(response => response.json())
@@ -718,7 +708,7 @@ function all_users(){
    {
     
     // creates variables for each inforamtion of the users
-      const username=data[i]['name'];const id=data[i]['id'];const firstname=data[i]['firstname'];
+      const username=data[i]['name']; const id=data[i]['id']; const firstname=data[i]['firstname'];
       const lastname=data[i]['lastname']; const dep=data[i]['department']; const date_hired=data[i]['date_hired'];
       const job_title=data[i]['job_title']; const profile_picture=data[i]['profile_picture'];const salary=data[i]['salary'];
       const userid=data[i]['user_id'];const avatar=data[i]['avatar'];
@@ -767,37 +757,48 @@ function all_users(){
                           dropdown_content.appendChild(user_dtl)  
     }
    }
+
+
+  const chat_container=document.querySelector('.chat-container');
+   chat_container.style.display='none';
+
   const dtl_btn=document.querySelectorAll('.dtl-btn')
-  
+  // const chat_submit=document.querySelector('.chat-submit');
+  // chat_submit.disabled = true;
+
   dtl_btn.forEach(dtl_btn=>{dtl_btn.onclick=(e)=>{
           e.stopPropagation();
           e.preventDefault();
           
-
+          
 
           console.log(e.target);
           // const id=e.target.id
           const id=e.target.getAttribute('id')
 
-   
+    const chat_container=document.querySelector('.chat-container');
+    chat_container.style.display='block';
+
+    const chat_submit=document.querySelector('.chat-submit');
+    chat_submit.disabled = true;
+    const textarea=document.querySelector('.chat-textarea');
+     textarea.onkeyup =()=>{
+      if(textarea.value.length > 0)
+      { chat_submit.disabled = false;}
+      else{ chat_submit.disabled = true}
+      
+      
+      // chat_submit.disabled=false;
+      }
 
     fetch(`${id}/message`)
     .then(response=>response.json())
     .then(data=>{console.log(data)
           console.log(id)
-          const chat_container=document.createElement('div');
-          chat_container.setAttribute('class', 'chat-container');
-          chat_container.setAttribute('id', 'chat-cont');
-
-          const scroll=document.createElement('div');
-          scroll.setAttribute('class', 'scroll')
-          // scroll.append(container,container_darker);
-          console.log(scroll);
-          // console.log(username)
+      
           const test = JSON.parse(document.getElementById('user_username').textContent);
           console.log(test)
-          // const reciever=data['msgs'][1]['reciever']
-          //    console.log(reciever)
+        
           console.log(data['msgs'].length)
 
     for(let i=0; i<data['msgs'].length; i++)
@@ -814,112 +815,60 @@ function all_users(){
           const main_reciever=data['msgs'][i]['reciever']
           console.log(reciever)
 
-          const container_darker=document.createElement('div')
-          container_darker.setAttribute('class', 'container-darker');
-          const container=document.createElement('div')  
-          container.setAttribute('class', 'container');
+       
 
+    var scrol=document.querySelector('.scroll')
     if(main_sender){
-          // const container=document.createElement('div')  
-          // container.setAttribute('class', 'container');
-          const img=document.createElement('img');
-          img.id='sender-img';
-          img.setAttribute('src',main_sender.picture);
-          const p=document.createElement('p');
-          p.appendChild(document.createTextNode(main_sender.msg));
-          const time_right=document.createElement('span');
-          time_right.appendChild(document.createTextNode(main_sender.time))
-          time_right.setAttribute('class', 'time-right');
-          container.append(img, p, time_right);
-
-          // container.scrollTo(0,container.scrollHeight);
+     
+      // var scrol=document.querySelector('.scroll')
+      const send_container=document.querySelector('.container')
+      clone_send=send_container.cloneNode(true)
+      clone_send.querySelector('#sender-img').setAttribute('src',main_sender.picture)
+      clone_send.querySelector('#sender-msg').append(document.createTextNode(main_sender.msg))
+      clone_send.querySelector('#time-right').append(document.createTextNode(main_sender.time))
+      scrol.appendChild(clone_send)
     } //dont fornget 
 
-    else{
-      
-          const right=document.createElement('img');
-          right.id='reciever-img'
-          right.setAttribute('src', main_reciever.picture);
-          const p1=document.createElement('p');
-          p1.appendChild(document.createTextNode(main_reciever.msg));
-          const time_left=document.createElement('span');
-          time_left.setAttribute('class', 'time-left');
-          time_left.appendChild(document.createTextNode(main_reciever.time));
-          container_darker.append(right,p1,time_left);
-        
-    }
-          const scrl_div=document.createElement('div');
-          
-        
-          scroll.append(container,container_darker);
-          
-          
-          console.log(id)
-          inner_pic=document.getElementById(`userid${id}`).getAttribute('src');
-          console.log(inner_pic);
-          console.log(id);
+    else if(main_reciever){
 
-    }
-    scroll.scrollTo(0,scroll.scrollHeight);
     
+      const recieve_container=document.querySelector('.container-darker')
+      clone_recieve=recieve_container.cloneNode(true)
+      clone_recieve.querySelector('#reciever-img').setAttribute('src',main_reciever.picture)
+      clone_recieve.querySelector('#reciever-msg').append(document.createTextNode(main_reciever.msg))
+      clone_recieve.querySelector('#time-left').append(document.createTextNode(main_reciever.time))
+       scrol.append(clone_recieve)
+      // console.log(scrol)
      
-    chat_header=document.createElement('div');
-    chat_header.setAttribute('class', 'chat-header');
-    chat_header.setAttribute('id', 'ch-header-id');
+    }
+    // scrol.scrollTop =scrol.scrollHeight                     
+    }// THE FOR LOOP ENDS HERE
+    scrol.scrollTop =scrol.scrollHeight
   
-    const header_img=document.createElement('img');
-    header_img.id='header-img';
-    header_img.setAttribute('src',inner_pic);
-    chat_header.append(header_img);  //here is the chat header pictures dont forget please
-    chat_container.append(chat_header);
-    console.log(chat_container);
-
+  console.log(document.querySelector('.scroll'));
+  //   console.log(id)
+    inner_pic=document.getElementById(`userid${id}`).getAttribute('src');
+    console.log(inner_pic);
   
-      const chat_form = document.createElement('form');
-      chat_form.setAttribute('class', 'chat-form');
-      chat_form.setAttribute('id', 'ch-form-id');
-      chat_form.setAttribute('cynctype', 'media-type');
-console.log(chat_form);
-      chat_textarea = document.createElement('textarea');
-      chat_textarea.setAttribute('class', 'chat-textarea');
-      chat_textarea.setAttribute('id', 'ch-textarea-id');
-      chat_textarea.setAttribute('name','message');
-
-      chat_submit=document.createElement('input');
-      chat_submit.setAttribute('class', 'chat-submit');
-      chat_submit.setAttribute('type', 'submit',);
-      chat_submit.setAttribute('value', 'send',);
-
-   
-      chat_form.append(chat_textarea,chat_submit);
     
-      chat_container.append(scroll,chat_form);
+    const head_img=document.querySelector('#header-img');
+    head_img.setAttribute('src',inner_pic)
 
-      
-
-  console.log(chat_container);
-
+ 
       const chat_div=document.querySelector('.chat-div');
     console.log(chat_div);
-      // chat_div.innerHTML = chat_container.innerHTML;
      
-       chat_div.append(chat_container)
-        
-      console.log(chat_container);
-
+   const chat_header= document.querySelector('.chat-header');
       chat_header.onclick=function(e)
       { e.preventDefault(); 
        e.stopPropagation();
-       chat_container.style.display='none';}
+       const chat_container=document.querySelector('.chat-container');
+       chat_container.style.display='none';
+      }
 
-      //  chat_submit.disabled = true;
-      //  document.querySelector('.chat-textarea').onkeyup=(e)=>{
-      //   e.preventDefault();
-      //   e.stopPropagation();
-      //   chat_submit.disabled=false;
-      //   }
+     
 
-    
+       const chat_submit=document.querySelector('.chat-submit');
         const chat_csrf=document.querySelector('[name=csrfmiddlewaretoken]').value
         console.log(chat_csrf);
         console.log(chat_submit)
@@ -929,9 +878,6 @@ console.log(chat_form);
         // chat_submit.disabled = true;
         const message=document.querySelector('.chat-textarea').value;
         
-        
-      
-       
         console.log(message);
        const chat_csrf=document.querySelector('[name=csrfmiddlewaretoken]').value
        console.log(chat_csrf);
@@ -943,15 +889,59 @@ console.log(chat_form);
               })
                .then(response =>response.json())
                .then(data =>{console.log(data)
-               
-                } )
-   
-                // chat_submit.disabled=true;
-       
-                // localStorage.setItem('content',chat_container.innerHTML)
-      }
+                var scrol=document.querySelector('.scroll')
+                scrol.innerHTML = ''        
+    for(let i=0; i<data['msgs'].length; i++)
+    {
+         const reciever=data['msgs'][i]['reciever']
+         const sender_id=data['msgs'][i]['sender_id']
+         const msg=data['msgs'][i]['msg']
+         const time=data['msgs'][i]['time']
+         console.log(reciever)
+         console.log(data['msgs'][i]['sender'])
+         console.log(id)
+         const main_sender=data['msgs'][i]['sender']
+         console.log(sender_id)
+         const main_reciever=data['msgs'][i]['reciever']
+         console.log(reciever)
 
-      localStorage.setItem('content',chat_container.innerHTML)     
+      
+
+   var scrol=document.querySelector('.scroll')
+  //  scrol.innerHTML = ''
+   if(main_sender){
+    
+     // var scrol=document.querySelector('.scroll')
+     const send_container=document.querySelector('.container')
+     clon_send=send_container.cloneNode(true)
+     lone_send.querySelector('#sender-img').setAttribute('src',main_sender.picture)
+     clon_send.querySelector('#sender-msg').append(document.createTextNode(main_sender.msg))
+     clon_send.querySelector('#time-right').append(document.createTextNode(main_sender.time))
+     scrol.appendChild(clon_send)
+   } //dont fornget 
+
+   else if(main_reciever){
+
+   
+     const recieve_container=document.querySelector('.container-darker')
+      clon_recieve=recieve_container.cloneNode(true)
+      clon_recieve.querySelector('#reciever-img').setAttribute('src',main_reciever.picture)
+      clon_recieve.querySelector('#reciever-msg').append(document.createTextNode(main_reciever.msg))
+      clon_recieve.querySelector('#time-left').append(document.createTextNode(main_reciever.time))
+      scrol.append(clon_recieve)
+     // console.log(scrol)
+    
+   }
+                         
+   }// THE FOR LOOP ENDS HERE
+    scrol.scrollTop =scrol.scrollHeight  
+    const text=document.querySelector('.chat-textarea') 
+    console.log(text)
+    text.value = '' 
+    document.querySelector('.chat-submit').disabled = true
+                } )
+                  
+      }
 
     })
   }});
@@ -1363,3 +1353,37 @@ document.addEventListener('DOMContentLoaded',()=>{
                 
                 
       //               } // endes
+
+
+       // console.log(scrol(data))
+                // const scrol=scroll.cloneNode(true);
+            
+              // for(let i=0; i<data.length; i++){
+              // //   console.log(scroll);
+              // // console.log( scroll.querySelector('#reciever-img'));
+              // const reciever=data['msgs'][i]['reciever']
+              // const sender_id=data['msgs'][i]['sender_id']
+              // const msg=data['msgs'][i]['msg']
+              // const time=data['msgs'][i]['time']
+              // console.log(reciever)
+              // console.log(data['msgs'][i]['sender'])
+              // console.log(id)
+              // const main_sender=data['msgs'][i]['sender']
+              // console.log(main_sender)
+              // const main_reciever=data['msgs'][i]['reciever']
+              // console.log(main_reciever)
+
+              // scrol.querySelector('#reciever-img').setAttribute('scr',main_reciever.picture)
+              // if( scrol.querySelector('#sender-img')){
+              // scrol.querySelector('#sender-img').setAttribute('scr',main_sender.picture)}
+              // scroll.querySelector('#reciever-msg').innerHTML=main_reciever.msg
+              // if( scrol.querySelector('#sender-msg')){
+              // scrol.querySelector('#sender-msg')=main_sender.msg}
+              // scrol.querySelector('#time-left').innerHTML=main_reciever.time
+              // // scroll.querySelector('#time-right').innerHTML=main_sender.time
+              // console.log(scrol)
+              // // scroll.querySelector('#sender-img').innerHTML=main_sender.picture
+              // // scroll.querySelector('#sender-img').innerHTML=main_sender.picture
+              // // scroll.querySelector('#sender-img').innerHTML=main_sender.picture
+              // }
+             

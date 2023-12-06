@@ -226,36 +226,6 @@ def new_picture(request):
     print([img.serialize() for img in mg])
     return render(request,'human_resource/index.html',context)
   
-         
-
-   
-    #     form = ImageForm(request.POST,request.FILES)
-    #     if form.is_valid():
-    #         img=form.cleaned_data.get('photo')
-    #         obj=Img.objects.create(user=user,photo=img)
-    #         obj.save()
-    #         # print(obj)
-    # # return HttpResponseRedirect("index")
-
-    # else:
-    #      form=ImageForm()
-    # context['form']=form
-    # mg=Img.objects.all()
-    # newOne=json.loads(serialize("json",mg))
-    # return render(request,'human_resource/index.html',context)
-    # if request.method == "POST":
-    #     form = ImageForm(request.POST, request.FILES)
-    #     print(form)
-    #     if form.is_valid():
-    #         # file is saved
-    #         # isntance=ImageForm(request.FILES.get('photo'))
-    #         img=Img(form,user=user)
-    #         img.save()
-    #         return HttpResponseRedirect("index")
-    # else:
-    #     form = ImageForm()
-    # return render(request, "upload.html", {"form": form})
-
 
 @csrf_exempt   
 def message(request,rec_id):
@@ -275,7 +245,36 @@ def message(request,rec_id):
         date=request.POST.get('date') 
         msg=Message(user=msg_end,sender_id=user.id,message=message,msg_time=date, profile_picture=form)
         msg.save()
-        return JsonResponse({'message':'sucess'}, safe=False)
+        msg_user=Message.objects.filter(user=user, sender_id=rec_id)
+        msg_user=[message.key_value() for message in msg_user]
+        count2= len(msg_user)
+        real_count=count2-count1
+        
+     
+        msg_sender=Message.objects.filter(user=msg_end, sender_id=user.id)
+        msg_sender=[message.key_value() for message in msg_sender]
+        sender=user.username
+        reciever=msg_end.username
+        # msg_set=Message.objects.filter(user_in=[user,sender_id] , sender_id=[user.id,sender_id] ).order_by('date')
+        msgs=(msg_sender + msg_user)
+        # newlist = sorted('list_to_be_sorted', key=lambda d: d['name'],reverse=True) /important
+        newlist = sorted(msgs, key=lambda d: d['time']) 
+      
+        newlist_2=[]
+      
+        for i in newlist: 
+            if i['reciever'] ==f'{sender}':
+                
+                m={'sender':i}
+                newlist_2.append(m)
+            else: 
+                n={'reciever':i}
+                newlist_2.append(n)
+        newlist_2
+       
+        # return JsonResponse({'msgs':msgs})
+        return JsonResponse({'msgs':newlist_2,'count':real_count})
+        # return JsonResponse({'message':'sucess'}, safe=False)
 
     if request.method =='GET':
       
