@@ -107,7 +107,7 @@ def applicant_form(request):
 
     if request.method == "POST":
         data=json.loads(request.body)
-        print(data)
+     
            
         firstname=data.get('firstname')
         secondname=data.get('secondname')
@@ -140,7 +140,7 @@ def applicant_form(request):
     
     if request.method == 'UPDATE':  
         data=json.loads(request.body)
-        print(data)
+   
            
         firstname=data.get('firstname')
         secondname=data.get('secondname')
@@ -194,7 +194,7 @@ def new_picture(request):
             if form.is_valid():
                 img=form.cleaned_data.get('photo')
                 applicant=Applicant_form.objects.get(user=user)
-                # print(img)
+               
                 old=Img.objects.get(user=user)
                 old.photo=img
                 old.save()
@@ -211,19 +211,19 @@ def new_picture(request):
                 obj.save()
                 applicant.profile_picture=img
                 applicant.save()
-                # print(obj)
+               
                 # return JsonResponse({'photo':'UPLOADED'})
     else:
        
         form=ImageForm()
         mg=Img.objects.filter(user=user)
-        print([img.serialize() for img in mg])
+       
         return JsonResponse([img.serialize() for img in mg],safe=False)
     context['form']=form
     mg=Img.objects.filter(user=user)
     # print(mg)
     newOne=json.loads(serialize("json",mg))
-    print([img.serialize() for img in mg])
+   
     return render(request,'human_resource/index.html',context)
   
 
@@ -337,15 +337,15 @@ def stat(request,user_id):
     static=list(User_stat.objects.filter(user=users).order_by('-id')[:1])
     static=[user_stat.serialize() for user_stat in static]
     # statics=json.loads(serialize("json", static))
-    print(static)
+ 
     wagerate=wage_rate.objects.filter(user=users)
     wage=[wage_rate.serialize() for wage_rate in wagerate]
-    print(wage)
+   
     applicant=Applicant_form.objects.filter(user=users)
     applicant=[applicant_form.serializer() for applicant_form in applicant]
     user_img=Img.objects.filter(user=users)
     user_img=[img.serialize() for img in user_img]
-    print(user_img)
+   
 
     
     return JsonResponse({'date':data_date,'y_axis':data_y,'static':static,'salary':total_salary, 'hours':total_hours,'wage':wage,'applicant':applicant,'user_img':user_img})
@@ -397,10 +397,13 @@ def is_onwork(request,user_id):
         is_onwork=data.get('is_onwork')
 
         stat=User_stat.objects.filter(user=user).order_by('-id').first()
+       
+        print(datetime.now().replace(tzinfo=utc))
         #    stat=[user_stat.serialize() for user_stat in stat_filter] 
         if stat:
             onleave=stat.is_onleave
             last_date=stat.date
+            print(last_date.replace(tzinfo=utc))
             last_hour=stat.hour
             year=datetime.now().year
             month=datetime.now().month
@@ -425,14 +428,17 @@ def is_onwork(request,user_id):
                                     hr=str(diff_hour)
                                     hr=hr.split(':')
                                     totaltime=int(hr[0])+(int(hr[1])/60)
+                                    print(f'lasthour:{totaltime} lastdatetime:{last_date} now:{datetime.now()}')
                                     hour=last_hour +totaltime
+                                    # hour=totaltime
                                     # user_stat=User_stat( user=user,date=date,hour=hour,is_onleave=False,is_onwork=False,rate=rate)
                                     stat.hour=hour
                                     stat.is_onwork=False
                                     stat.date=datetime.now()
                                     stat.save()
                                     user_static=User_stat.objects.all()
-                                    return JsonResponse([user_stat.serialize() for user_stat in user_static],safe=False)
+                                    # return JsonResponse([user_stat.serialize() for user_stat in user_static],safe=False)
+                                    return JsonResponse({'response':'on break'})
                                 
                                 elif is_onwork==True and  is_onleave==False:
                                     # stat.hour=0
@@ -440,17 +446,20 @@ def is_onwork(request,user_id):
                                     stat.date=datetime.now()
                                     stat.save()
                                     user_static=User_stat.objects.all()
-                                    return JsonResponse([user_stat.serialize() for user_stat in user_static],safe=False)
+                                    # return JsonResponse([user_stat.serialize() for user_stat in user_static],safe=False)
+                                    return JsonResponse({"response":'back on  work from break'})
                                 #    user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True)
-                            else:
-                                # user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True, rate=rate)
-                                return JsonResponse({'response':'this is not working hour','workhour':False})
-                            #  elif onleave==True and  request.post.get('onleave')==False:
-                            #  user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True)
-
-            elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)) and (is_onleave==False )and ( last_date.replace(tzinfo=utc)>time_begin.replace(tzinfo=utc) and last_date.replace(tzinfo=utc)>time_end.replace(tzinfo=utc)):
+                            # else: # DOUBLE CHECK ON HERE AVOID REDUDUNCY 
+                            #     # user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True, rate=rate)
+                            #     return JsonResponse({'response':'this is not working hour','workhour':False})
+                          
+            # elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)) and (onleave==False )and ( last_date.replace(tzinfo=utc)>time_begin.replace(tzinfo=utc) and last_date.replace(tzinfo=utc)>time_end.replace(tzinfo=utc)):
+            elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)) and (onleave==False )and ( last_date.replace(tzinfo=utc)<time_begin.replace(tzinfo=utc) ):
                     user_stat=User_stat(user=user,date=datetime.now,hour=0,is_onleave=False, is_onwork=True, rate=rate)
-                    return JsonResponse({'response':user_stat})
+                    # return JsonResponse({'response':user_stat})
+                    return JsonResponse({'response':'welcome back'})
+            elif (datetime.now().replace(tzinfo=utc) > time_end.replace(tzinfo=utc)) and (onleave==False ):
+                return JsonResponse({'response':'this is not working hours'})
             else:
                  return JsonResponse({'response':'you are on leave'})
         elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)):
@@ -458,8 +467,8 @@ def is_onwork(request,user_id):
                 work_start=User_stat(is_onwork=True,is_onleave=False,hour=0,rate=rate,user=user)
                 work_start.save()
             return JsonResponse({'response':'you have started working'})
-        else:
-            return JsonResponse({'response':'not working hour'})
+        # else:
+        #     return JsonResponse({'response':'not working hour'})
 
    
    
@@ -480,7 +489,7 @@ def is_onwork(request,user_id):
 def all_users(request):
     user=request.user
     form=Applicant_form.objects.all()
-    print(form)
+   
     return JsonResponse([applicant_form.serializer() for applicant_form in form], safe=False)
   
 
@@ -531,7 +540,7 @@ def edit(request,id):
         target_user=User.objects.get(id=id)
         if Edit.objects.filter(user=target_user).exists():
             data=json.loads(request.body)
-            print(data)
+           
             value=data.get('is_allowed')
             existing_status=Edit.objects.get(user=target_user)
             existing_status.is_allowed=value
@@ -544,11 +553,11 @@ def edit(request,id):
             posting_new_status=Edit(user=target_user, is_allowed=True)
             posting_new_status.save()
             new_posting=Edit.objects.filter(user=target_user)
-            print(new_posting)
+           
             return JsonResponse([edit.serialize() for edit in new_posting],safe=False)
     if request.method == 'GET':
         user_edit_status=Edit.objects.filter(user=user)
-        print(user_edit_status)
+      
         if user_edit_status:
             return JsonResponse([edit.serialize() for edit in user_edit_status], safe=False)
         else:

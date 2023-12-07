@@ -183,7 +183,11 @@ function sidebar_profile(){
          headers: {'Content-Type': 'application/json',
                    'X-CSRFToken':csrf_leave}})
           .then(response => response.json())
-          .then(data =>{console.log(data)})
+          .then(data =>{console.log(data)
+           
+          })
+
+      
 
         onleave.style.display='block';
         leave_btn_ask.style.display='none';
@@ -208,8 +212,9 @@ function sidebar_profile(){
       stat.onclick=()=>{chart.style.display='block';
                      leave.style.display='none'
                      time_keeping_div.style.display='none';
+                     window.location.reload();
                     }
-
+       
       // time keeping starts here
 
       // const time_keeping=document.querySelector('#time-keeping')
@@ -233,40 +238,6 @@ function sidebar_profile(){
 
        }
 
-// sidebar chart and leave end
-
-// function trial(){
-//   const trial_btn=document.querySelector('#trial-btn');
-//   const trial=document.querySelector('#trial')
-//   const leave=document.querySelector(".leave");
-//   const onleave=document.querySelector(".onleave");
-//   const chart=document.querySelector("#chart");
-//   trial_btn.onclick=()=>{
-//     leave.style.display='none';
-//     chart.style.display='none';
-//     trial.style.display='block';
-//    }
-// } 
-// function stat(){
-//         var leave_main= document.querySelector("#leave-main");
-//         var stat=document.querySelector("#stat");
-//         const trial=document.querySelector('#trial')
-//      stat.onclick=()=>{chart.style.display='block';
-//                       leave.style.display='none'
-//                       trial.style.display='none' }
-//     }
-     
-// document.addEventListener("DOMContentLoaded",function(){
-// function user_dtl(){
-  // const dtl_btn=document.querySelector(".dtl-btn");
-  // console.log(dtl_btn);
-  // dtl_btn.onclick=(e)=>{
-  //   e.preventDefault();
-  //   const chat_cont=document.querySelector("#chat-cont");
-  //   console.log(chat_cont);
-  //   chat_cont.style.display='block';}
-// }
-// })
 
 function application (){ 
   
@@ -752,7 +723,7 @@ function all_users(){
                           const user_dtl=document.createElement('div')
                           user_dtl.setAttribute('class','user-dtl')
                           user_dtl.append(dtl_btn,dtl_content)
-                          console.log('all_users here');
+                         
                           const dropdown_content=document.querySelector('.dropdown-content')
                           dropdown_content.appendChild(user_dtl)  
     }
@@ -1061,8 +1032,9 @@ document.addEventListener('DOMContentLoaded', function(){
                console.log(time_onwork)
                time_keeping_div.append(time_onwork)
                console.log(time_keeping_div)
-              
+             
               })
+           
   } 
   else {
     
@@ -1086,7 +1058,9 @@ document.addEventListener('DOMContentLoaded', function(){
       console.log(time_keeping_div.children)
       // const time_onwork=document.createElement('div')
       $(".time-keeping-div").append(time_onwork.append(document.createTextNode(`you are off-work since ${time_onwork}`)))
+   
       })
+    
   }
   });
 });
