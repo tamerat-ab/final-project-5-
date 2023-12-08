@@ -70,6 +70,7 @@
 
 <div class="apl-form-div">
 <h3>New Employee Application Form </h3>
+<div class="scroll-form">
 <form id="apl-form">  
   {% csrf_token %}
   First Name: <br> <input name="firstname"  id="first-name" type="text" placeholder="first name"><br>
@@ -85,6 +86,7 @@
   <input id="submit-btn-apl" type="submit" value="submit form"> 
 </form>
 
+</div>
 </div>
 
 <div class="apl-clone-div"></div>
@@ -105,15 +107,14 @@
 
 <div class="time-keeping-div">
        <div class="server-time"></div>
-      
-       <label class="switch">
-        <input type="checkbox" id="ck1" onchange="save()">
-        <span class="slider round hide-off">ON</span>
-        
-        </label>
-        
- 
-        
+       <div id="slide-div">
+             <label class="switch">
+              <input type="checkbox" id="ck1" onchange="save()">
+              <span class="slider round hide-off">ON</span>
+              </label>
+              <div id="check-dtl"> check box </div>
+     
+        </div>
 
 </div>
 

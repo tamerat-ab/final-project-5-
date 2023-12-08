@@ -21,6 +21,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from dateutil import parser #helps to parse string format date in datetime format
 import pytz
 utc=pytz.UTC #the above two modules modulate the datetime naive and datetime aware issues
+eu_zone=pytz.timezone('Europe/Berlin')
 
 # from PIL import Image
 # from io import BytesIO
@@ -352,13 +353,14 @@ def stat(request,user_id):
     
 @csrf_exempt
 def is_onwork(request,user_id):
+   
     year=datetime.now().year
     month=datetime.now().month
     day=datetime.now().day
     #    in case the user forgot to leave the javascript should count time and fetch the onleave data ------dont 
-    time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').replace(tzinfo=utc)
+    time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').replace(tzinfo=eu_zone)
             #    time_end = datetime.fromisoformat(f'{year}-{month}-{day} 17:30:00')
-    time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').replace(tzinfo=utc)
+    time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').replace(tzinfo=eu_zone)
 
     user = request.user
 
@@ -398,32 +400,32 @@ def is_onwork(request,user_id):
 
         stat=User_stat.objects.filter(user=user).order_by('-id').first()
        
-        print(datetime.now().replace(tzinfo=utc))
+        print(datetime.now().replace(tzinfo=eu_zone))
         #    stat=[user_stat.serialize() for user_stat in stat_filter] 
         if stat:
             onleave=stat.is_onleave
             last_date=stat.date
-            print(last_date.replace(tzinfo=utc))
+            print(last_date.replace(tzinfo=eu_zone))
             last_hour=stat.hour
             year=datetime.now().year
             month=datetime.now().month
             day=datetime.now().day
             #    time_begin = datetime.fromisoformat(f'{year}-{month}-{day} 08:00:00, '%Y-%m-%dT%H:%M:%S.%f') 
-            time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').replace(tzinfo=utc)
+            time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').replace(tzinfo=eu_zone)
             #    time_end = datetime.fromisoformat(f'{year}-{month}-{day} 17:30:00')
-            time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').replace(tzinfo=utc)
+            time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').replace(tzinfo=eu_zone)
         
         
 
             if last_date and (time_begin < last_date < time_end) and ( onleave==False):
                         # if onleave==False and request.post.get('is_onleave')==True:
 
-                            if (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)):
+                            if (time_begin.replace(tzinfo=eu_zone) < datetime.now().replace(tzinfo=eu_zone) < time_end.replace(tzinfo=eu_zone)):
                                 if is_onwork==False and is_onleave==False:
                                     # if last_date.strftime('%d %b %y')==datetime.now().strftime('%d %b %y'):
                                 
                                     # hr=int(datetime.now().strftime("%H:%M"))-int(last_date.strftime("%H:%M"))
-                                    diff_hour=(datetime.now().replace(tzinfo=utc))-(last_date.replace(tzinfo=utc))
+                                    diff_hour=(datetime.now().replace(tzinfo=eu_zone))-(last_date.replace(tzinfo=eu_zone))    
                                     # hr=str(diff_hour.strftime("%H:%M"))
                                     hr=str(diff_hour)
                                     hr=hr.split(':')
@@ -438,7 +440,7 @@ def is_onwork(request,user_id):
                                     stat.save()
                                     user_static=User_stat.objects.all()
                                     # return JsonResponse([user_stat.serialize() for user_stat in user_static],safe=False)
-                                    return JsonResponse({'response':'on break'})
+                                    return JsonResponse({'response':'ON BREAK'})
                                 
                                 elif is_onwork==True and  is_onleave==False:
                                     # stat.hour=0
@@ -447,28 +449,28 @@ def is_onwork(request,user_id):
                                     stat.save()
                                     user_static=User_stat.objects.all()
                                     # return JsonResponse([user_stat.serialize() for user_stat in user_static],safe=False)
-                                    return JsonResponse({"response":'back on  work from break'})
+                                    return JsonResponse({"response":'YOU ARE BACK ON WORK FROM BREAK'})
                                 #    user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True)
-                            # else: # DOUBLE CHECK ON HERE AVOID REDUDUNCY 
-                            #     # user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True, rate=rate)
-                            #     return JsonResponse({'response':'this is not working hour','workhour':False})
+                            else: # DOUBLE CHECK ON HERE AVOID REDUDUNCY 
+                                # user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True, rate=rate)
+                                return JsonResponse({'response':'NOW IS NOT WORKING HOUR','workhour':False})
                           
             # elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)) and (onleave==False )and ( last_date.replace(tzinfo=utc)>time_begin.replace(tzinfo=utc) and last_date.replace(tzinfo=utc)>time_end.replace(tzinfo=utc)):
-            elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)) and (onleave==False )and ( last_date.replace(tzinfo=utc)<time_begin.replace(tzinfo=utc) ):
+            elif (time_begin.replace(tzinfo=eu_zone) < datetime.now().replace(tzinfo=eu_zone) < time_end.replace(tzinfo=eu_zone)) and (onleave==False )and ( last_date.replace(tzinfo=eu_zone)<time_begin.replace(tzinfo=eu_zone) ):
                     user_stat=User_stat(user=user,date=datetime.now,hour=0,is_onleave=False, is_onwork=True, rate=rate)
                     # return JsonResponse({'response':user_stat})
-                    return JsonResponse({'response':'welcome back'})
-            elif (datetime.now().replace(tzinfo=utc) > time_end.replace(tzinfo=utc)) and (onleave==False ):
-                return JsonResponse({'response':'this is not working hours'})
+                    return JsonResponse({'response':'WELCOME BACK'})
+            elif (datetime.now().replace(tzinfo=eu_zone) > time_end.replace(tzinfo=eu_zone)) and (onleave==False ):
+                return JsonResponse({'response':'THIS IS NOT A WORKING HOUR'})
             else:
-                 return JsonResponse({'response':'you are on leave'})
-        elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)):
+                 return JsonResponse({'response':'YOU ARE ON LEAVE NOW'})
+        elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=eu_zone) < time_end.replace(tzinfo=eu_zone)):
             if is_onwork==True and is_onleave==False:
                 work_start=User_stat(is_onwork=True,is_onleave=False,hour=0,rate=rate,user=user)
                 work_start.save()
-            return JsonResponse({'response':'you have started working'})
-        # else:
-        #     return JsonResponse({'response':'not working hour'})
+            return JsonResponse({'response':'YOU HAVE STARTED WORKING'})
+        else:
+            return JsonResponse({'response':'NOW IS  NOT WORKING HOUR'})
 
    
    
@@ -510,29 +512,28 @@ def set_rate(request):
         # new_rate=request.POST.get('rate')
         data=json.loads(request.body)
         newrate=data.get('rate')
+        print(newrate)
         static=wage_rate.objects.all()  
+        print(static)
        
-        if static.exists():
-            try:
-                users=User.objects.all()
-                for user in users:
-                    stat=wage_rate.objects.get(user=user)             
-                    stat.rate=newrate  
-                    stat.save()      
-               
-                return JsonResponse({'update_rate':newrate})
-            except:
-                return JsonResponse({'response':'error with setting wage rate'})
-        else:
+        # if static.exists():
+        try:
             users=User.objects.all()
-            # users=[user.serialize() for user in users]
-            for user in users:
-                set_rate=wage_rate(user=user,rate=newrate)
-                set_rate.save()
-                new_update=wage_rate.objects.all()
-            return JsonResponse([wage_rate.serialize()for wage_rate in new_update])
-
-
+            print(users)
+            for users in users:
+                if wage_rate.objects.filter(user=users):
+                    stat=wage_rate.objects.get(user=users)                          
+                    stat.rate=newrate  
+                    stat.save() 
+                else:   
+                    set_rate=wage_rate(user=users,rate=newrate)
+                    set_rate.save()  
+                    print(set_rate)
+                
+            return JsonResponse({'update_rate':newrate})
+        except:
+            return JsonResponse({'response':'error rate setting'})
+      
 
 def edit(request,id):
     user=request.user

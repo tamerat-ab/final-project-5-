@@ -57,6 +57,7 @@ function sidebar_profile(){
        var time_keeping=document.querySelector("#time-keeping");
        const time_keeping_div=document.querySelector(".time-keeping-div");
        const apl_form_div=document.querySelector(".apl-form-div");
+       const slide_div=document.querySelector(".slide-div");
        console.log(apl_form_div);
       //  const apl_form=document.querySelector("#apl-form");
       fetch('application')
@@ -73,7 +74,15 @@ function sidebar_profile(){
        else{
         chart.style.display='none';
         leave.style.display='none';
+        // time_keeping.style.display='none'
         time_keeping_div.style.display='none'
+        leave_form.style.display='none';
+        leave_btn_ask.style.display='none';
+        leave.leave_btn_back.style.display='none';
+        onleave.style.display='none';
+        slide_div.style.display='none'
+        
+
         apl_form_div.style.display='block'
 
        }
@@ -423,10 +432,12 @@ console.log(document.getElementById('apl-clone'))
   fetch(`${id}/stat`)    
       .then(response => response.json())
       .then( data2 =>{console.log(data2)
-        console.log(data2['static'][0]['onleave'])
-       
-        const status_leave=data2['static'][0]['onleave']
-        const status_work=data2['static'][0]['onwork']
+        // console.log(data2['static'][0]['onleave'])
+      // //   if (data2['static'][0]['onleave'] && data2['static'][0]['onwork'])
+      // //  {
+      //   const status_leave=data2['static'][0]['onleave']
+      //   const status_work=data2['static'][0]['onwork']
+      //   //  }
         const firstname=data2['applicant'][0]['firstname']
         console.log(firstname)
         const date_hired=data2['applicant'][0]['date_hired']
@@ -442,8 +453,10 @@ console.log(document.getElementById('apl-clone'))
         const rate=data2['wage'][0]['rate']
         console.log(rate)
         
-        const text=localStorage.getItem(`${id}`) // local storage assigned for each user with respect to their id
+        // const text=localStorage.getItem(`${id}`) // local storage assigned for each user with respect to their id
         const admin_right=document.querySelector('.admin-right')
+
+        
 
        const adm_dtl=document.createElement('div')
        adm_dtl.setAttribute('class', 'adm-dtl')
@@ -488,7 +501,7 @@ console.log(document.getElementById('apl-clone'))
        const adm_salary=document.createElement('div')
        adm_salary.setAttribute('class', 'adm-salary')
        adm_salary.append(document.createTextNode(`Salary ${salary}`))
-       const adm_edit=document.createElement('button')
+      //  const adm_edit=document.createElement('button')
       //  adm_edit.setAttribute('data', `${id}`)
       //  adm_edit.setAttribute('class', 'adm-edit')
       //  adm_edit.append(document.createTextNode(text))
@@ -506,26 +519,52 @@ console.log(document.getElementById('apl-clone'))
        admin_right.append(adm_dtl);
        console.log(admin_right)
        
-
+       if (data2['static'].length>0){
+             const status_leave=data2['static'][0]['onleave']
+           const status_work=data2['static'][0]['onwork']
             if(status_leave==true){
                                           const status_false=document.createElement('div')
-                                          status_false.setAttribute('class','status-false')
-                                          adm_data.append(status_false.appendChild(document.createTextNode('On leave now')))}
+                                          status_false.setAttribute('class','status-onwork')
+                                          status_false.id='status-onwork'
+                                          
+                                           adm_data.append(status_false.appendChild(document.createTextNode('On leave now')))
+                                        }
                                         
             else if (status_work==true){ status_true=document.createElement('div')
-                                         status_true.setAttribute('class','status-true')
-                                         adm_data.append(status_true.appendChild(document.createTextNode('On work now')));}
-            else{const status_none=document.createElement('div');status_none.setAttribute('class','status-none')
-                                          adm_data.append(status_none.append(document.createTextNode('Regular')))}
+                                         status_true.setAttribute('class','status-onwork')
+                                      
+                                         adm_data.append(status_true.appendChild(document.createTextNode('On work now')));
+                                      }
+            else if (status_work==false){ status_true=document.createElement('div')
+            status_true.setAttribute('class','status-onwork')
 
+            adm_data.append(status_true.appendChild(document.createTextNode(' off duty now')))
+          }
+            else{const status_none=document.createElement('div');
+                  status_none.setAttribute('class','status-onwork')
+                   adm_data.appendChild(status_none.appendChild(document.createTextNode('off duty now')));}
+                 }
+          else{const status_none=document.createElement('div');
+                  status_none.setAttribute('class','status-onwork');
+                  status_none.id='status-none';
+                 adm_data.appendChild(status_none.appendChild(document.createTextNode('off duty now')))}
+      
+      const adm_edit=document.createElement('button')
       adm_edit.setAttribute('data', `${id}`)
-      adm_edit.setAttribute('class', 'adm-edit')
+      adm_edit.setAttribute('class', 'adm-edit')           
+      if(localStorage.getItem(`${id}`)){     
+      const text=localStorage.getItem(`${id}`)
+      console.log(text)
       adm_edit.append(document.createTextNode(text))
+      adm_data.append(adm_edit)}
+      else{
+      adm_edit.append(document.createTextNode('Edit'))
       adm_data.append(adm_edit)
+      }
             const permit=document.querySelectorAll('.adm-edit')
              console.log(permit)
            
-          permit.forEach(permit=>{permit.onclick=async(e)=>{
+          permit.forEach(permit=>{permit.onclick=(e)=>{
       
             e.preventDefault();
             e.stopPropagation();
@@ -535,16 +574,16 @@ console.log(document.getElementById('apl-clone'))
             console.log(id)
             if(e.target.innerHTML==='Edit'){
               const csrf_permit=document.querySelector('[name="csrfmiddlewaretoken"]').value
-              await fetch(`${id}/edit`,{
+               fetch(`${id}/edit`,{
                 method: 'UPDATE',body:JSON.stringify({ is_allowed:true}),headers:{'Content-Type': 'application/json','X-CSRFToken':csrf_permit}}) 
                 .then(response=>response.json())
                 .then(data=>{console.log(data)
-                      permit.innerHTML='Editiding'
+                      permit.innerHTML='Editing'
                      })}
           
-            else if (e.target.innerHTML==='Editiding'){
+            else if (e.target.innerHTML==='Editing'){
                   const csrf_permit1=document.querySelector('[name="csrfmiddlewaretoken"]').value
-             await fetch(`${id}/edit`,{
+              fetch(`${id}/edit`,{
                      method: 'UPDATE',body:JSON.stringify({ is_allowed:false}),headers:{'Content-Type': 'application/json','X-CSRFToken':csrf_permit1}})
                      .then(response=>response.json())
                      .then(data=>{console.log(data) ; permit.innerHTML='Edit'})
@@ -1009,7 +1048,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const if_checked = e.currentTarget.checked;
           const date=new Date()
     if (if_checked === true) {
-      console.log('show me the id 1')
+      
      const user_id=JSON.parse(document.getElementById('user_id').textContent)
      const csrf_workon=document.querySelector('[name=csrfmiddlewaretoken]').value;
      console.log(csrf_workon);
@@ -1028,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', function(){
               const time_onwork=document.createElement('div')
               time_onwork.id="time_onwork"
               console.log(time_onwork)
-               time_onwork.appendChild(document.createTextNode(`${data['response']}`));
+               time_onwork.append(document.createTextNode(`${data['response']}`));
                console.log(time_onwork)
                time_keeping_div.append(time_onwork)
                console.log(time_keeping_div)
@@ -1123,9 +1162,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     headers:{'Content-type':'application/json',
              'X-CSRFToken':csr}} )
     .then(response=>response.json())
-    .then(data=>{console.log(data)})
+    .then(data=>{console.log(data)
     
     
+    })
+  //  window.location.reload()
+
   }
 });
 
