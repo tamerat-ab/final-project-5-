@@ -346,10 +346,12 @@ def stat(request,user_id):
     applicant=[applicant_form.serializer() for applicant_form in applicant]
     user_img=Img.objects.filter(user=users)
     user_img=[img.serialize() for img in user_img]
+    edit=Edit.objects.filter(user=users)
+    edited=[edit.serialize() for edit in edit]
    
 
     
-    return JsonResponse({'date':data_date,'y_axis':data_y,'static':static,'salary':total_salary, 'hours':total_hours,'wage':wage,'applicant':applicant,'user_img':user_img})
+    return JsonResponse({'edit':edited,'date':data_date,'y_axis':data_y,'static':static,'salary':total_salary, 'hours':total_hours,'wage':wage,'applicant':applicant,'user_img':user_img})
     
 @csrf_exempt
 def is_onwork(request,user_id):

@@ -682,19 +682,35 @@ input:checked + .slider:before {
    height: 90%;
    text-align: center;
 }
-.scroll-form{
-  /* max-height: 200px; */
+.scroll-form,.clone-scroll{
+            /* max-height: 400px;  */
             overflow: scroll; 
             overflow-y:scroll;  
             background-color:aliceblue;
+
 
             /* width: 400px;
             height: 120px; */
             /* overflow-x: scroll; */
             display: flex;
-            flex-direction:column   
-            /* scroll-behavior: auto; */ 
+            flex-direction:column ;  
+            scroll-behavior: auto; 
 }
+.clone-scroll{
+            max-height: 400px; 
+            overflow: scroll; 
+            overflow-y:scroll;  
+            background-color:aliceblue;
+
+
+            /* width: 400px;
+            height: 120px; */
+            /* overflow-x: scroll; */
+            display: flex;
+            flex-direction:column ;  
+            scroll-behavior: auto; 
+}
+
     </style>
 </head>
 

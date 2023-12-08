@@ -359,6 +359,9 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                       const time_keeping_div=document.querySelector(".time-keeping-div");
                                       const apl_form_div=document.querySelector(".apl-form-div");
                                       const apl_clone_div=document.querySelector(".apl-clone-div");
+                                      const clone_scroll=document.querySelector('.clone-scroll');
+                                      const h4=document.createElement('h4');
+                                      h4.innerHTML='EDITING APPLICATION FORM';
                                       chart.style.display='none';
                                       leave.style.display='none';
                                       time_keeping_div.style.display='none';
@@ -367,7 +370,8 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                       apl_clone.id = 'apl-clone'; // convert the cloned form id to differentiate it from the original
                                       
                                       console.log(apl_clone)
-                                      apl_clone_div.append(apl_clone);
+                                      clone_scroll.append(apl_clone)
+                                      apl_clone_div.append(h4,clone_scroll);
                                       console.log(apl_clone_div)
                                       apl_clone_div.style.display='block'
 
@@ -552,10 +556,8 @@ console.log(document.getElementById('apl-clone'))
       const adm_edit=document.createElement('button')
       adm_edit.setAttribute('data', `${id}`)
       adm_edit.setAttribute('class', 'adm-edit')           
-      if(localStorage.getItem(`${id}`)){     
-      const text=localStorage.getItem(`${id}`)
-      console.log(text)
-      adm_edit.append(document.createTextNode(text))
+      if(data2['edit'][0]['status']==true){        
+      adm_edit.append(document.createTextNode('Editing'))
       adm_data.append(adm_edit)}
       else{
       adm_edit.append(document.createTextNode('Edit'))
@@ -572,7 +574,7 @@ console.log(document.getElementById('apl-clone'))
          
             const id=e.target.getAttribute('data')
             console.log(id)
-            if(e.target.innerHTML==='Edit'){
+            if(e.target.innerHTML=='Edit'){
               const csrf_permit=document.querySelector('[name="csrfmiddlewaretoken"]').value
                fetch(`${id}/edit`,{
                 method: 'UPDATE',body:JSON.stringify({ is_allowed:true}),headers:{'Content-Type': 'application/json','X-CSRFToken':csrf_permit}}) 
@@ -581,7 +583,7 @@ console.log(document.getElementById('apl-clone'))
                       permit.innerHTML='Editing'
                      })}
           
-            else if (e.target.innerHTML==='Editing'){
+            else if (e.target.innerHTML=='Editing'){
                   const csrf_permit1=document.querySelector('[name="csrfmiddlewaretoken"]').value
               fetch(`${id}/edit`,{
                      method: 'UPDATE',body:JSON.stringify({ is_allowed:false}),headers:{'Content-Type': 'application/json','X-CSRFToken':csrf_permit1}})
@@ -591,14 +593,14 @@ console.log(document.getElementById('apl-clone'))
         // });
               }
        
-      console.log('permit')
-      const status=document.querySelector('.adm-edit')
-      console.log(status.innerHTML)
-      if (status.innerHTML==='Edit')
-      localStorage.setItem(`${id}`,'Editing') // store edititng status information in localStorage
-    else{localStorage.setItem(`${id}`,'Edit')}
+    //   console.log('permit')
+    //   const status=document.querySelector('.adm-edit')
+    //   console.log(status.innerHTML)
+    //   if (status.innerHTML=='Edit')
+    //   localStorage.setItem(`${id}`,'Editing') // store edititng status information in localStorage
+    // else{localStorage.setItem(`${id}`,'Edit')}
       
-  
+     
       
        }})
 
