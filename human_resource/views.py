@@ -137,6 +137,8 @@ def applicant_form(request):
                                                      
                                                         profile_picture=picture)
         applicant_form.save()
+        isUpdate=Edit(user=user,is_allowed=False)
+        isUpdate.save()
         return HttpResponseRedirect(reverse("index"))
     
     if request.method == 'UPDATE':  

@@ -411,7 +411,17 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                                        'X-CSRFToken':csrf_update}}
                                                      )
                                               .then(response => response.json())   //what going on here please correct the response prt
-                                              .then(data => {console.log(data)})}
+                                              .then(data => {console.log(data)
+
+                                      chart.style.display='block';
+                                      leave.style.display='none';
+                                      time_keeping_div.style.display='none';
+                                      apl_form_div.style.display='none'
+                                      // const apl_clone_div=document.querySelector(".apl-clone-div")
+                                      apl_clone_div.style.display='none'
+                                     
+                                              
+                                              })}
                                    
                                       }
 
@@ -834,7 +844,7 @@ function all_users(){
      
       // var scrol=document.querySelector('.scroll')
       const send_container=document.querySelector('.container')
-      clone_send=send_container.cloneNode(true)
+      const clone_send=send_container.cloneNode(true)
       clone_send.querySelector('#sender-img').setAttribute('src',main_sender.picture)
       clone_send.querySelector('#sender-msg').append(document.createTextNode(main_sender.msg))
       clone_send.querySelector('#time-right').append(document.createTextNode(main_sender.time))
@@ -845,7 +855,7 @@ function all_users(){
 
     
       const recieve_container=document.querySelector('.container-darker')
-      clone_recieve=recieve_container.cloneNode(true)
+      const clone_recieve=recieve_container.cloneNode(true)
       clone_recieve.querySelector('#reciever-img').setAttribute('src',main_reciever.picture)
       clone_recieve.querySelector('#reciever-msg').append(document.createTextNode(main_reciever.msg))
       clone_recieve.querySelector('#time-left').append(document.createTextNode(main_reciever.time))
@@ -853,9 +863,9 @@ function all_users(){
       // console.log(scrol)
      
     }
-    // scrol.scrollTop =scrol.scrollHeight                     
+    scrol.scrollTop =scrol.scrollHeight                     
     }// THE FOR LOOP ENDS HERE
-    scrol.scrollTop =scrol.scrollHeight
+    
   
   console.log(document.querySelector('.scroll'));
   //   console.log(id)
@@ -926,7 +936,7 @@ function all_users(){
      // var scrol=document.querySelector('.scroll')
      const send_container=document.querySelector('.container')
      clon_send=send_container.cloneNode(true)
-     lone_send.querySelector('#sender-img').setAttribute('src',main_sender.picture)
+     clon_send.querySelector('#sender-img').setAttribute('src',main_sender.picture)
      clon_send.querySelector('#sender-msg').append(document.createTextNode(main_sender.msg))
      clon_send.querySelector('#time-right').append(document.createTextNode(main_sender.time))
      scrol.appendChild(clon_send)
