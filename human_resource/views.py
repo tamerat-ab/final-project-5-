@@ -98,6 +98,8 @@ def application(request):
     user=request.user
     if Applicant_form.objects.filter(user=user).exists():
       return JsonResponse({'response':True})
+    else:
+        return JsonResponse({'response':False})
 
 @csrf_exempt
 def applicant_form(request): 

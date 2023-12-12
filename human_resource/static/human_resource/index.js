@@ -39,31 +39,32 @@ function front_page() {
 
 
 function sidebar_profile(){
- console.log("sidebar_profile");
- fetch('application')
- .then(response=>response.json())
- .then(data=>{console.log(data)
-       console.log(data['response']);});
+//  console.log("sidebar_profile");
+//  fetch('application')
+//  .then(response=>response.json())
+//  .then(data=>{console.log(data)
+//        console.log(data['response']);});
 // sidebar char and leave 
 
-       var leave_main= document.querySelector("#leave-main");
-       var stat=document.querySelector("#stat");
+       const leave_main= document.querySelector("#leave-main");
+       const stat=document.querySelector("#stat");
        const leave=document.querySelector(".leave");
        const onleave=document.querySelector(".onleave");
        const chart=document.querySelector("#chart");
        const leave_form=document.querySelector("#leave-form");
        const leave_btn_ask=document.querySelector(".leave-btn-ask");
        const leave_btn_back=document.querySelector(".leave-btn-back")
-       var time_keeping=document.querySelector("#time-keeping");
+       const time_keeping=document.querySelector("#time-keeping");
        const time_keeping_div=document.querySelector(".time-keeping-div");
        const apl_form_div=document.querySelector(".apl-form-div");
        const slide_div=document.querySelector(".slide-div");
        console.log(apl_form_div);
       //  const apl_form=document.querySelector("#apl-form");
-      fetch('application')
+  fetch('application')
  .then(response=>response.json())
  .then(data=>{
                console.log(data['response'])
+       console.log('lest see')
        if(data['response']==true)
        {
        chart.style.display='block';
@@ -71,22 +72,26 @@ function sidebar_profile(){
        time_keeping_div.style.display='none';
        apl_form_div.style.display='none'
        }
-       else{
+   
+       else {
+        onleave.style.display='none'
         chart.style.display='none';
-        leave.style.display='none';
+        // leave.style.display='none';
         // time_keeping.style.display='none'
+       
+        // leave_main.style.display='none'
         time_keeping_div.style.display='none'
         leave_form.style.display='none';
         leave_btn_ask.style.display='none';
-        leave.leave_btn_back.style.display='none';
-        onleave.style.display='none';
+        leave_btn_back.style.display='none';
+        // onleave.style.display='none';
         slide_div.style.display='none'
-        
-
-        apl_form_div.style.display='block'
+      
+         apl_form_div.style.display='block';
 
        }
       });
+      // LEAVE FORM BUTTON CODE STARTS HERE
        leave_main.onclick=(e)=>{
         user_id=JSON.parse(document.getElementById('user_id').textContent);
         fetch(`${user_id}/is_onwork`)
@@ -125,10 +130,7 @@ function sidebar_profile(){
                 back_onwork_btn.onclick=(e)=>{
                 e.stopPropagation()
                 e.preventDefault()
-                // const csrf_backonwork=document.querySelector('[name=csrfmiddlewaretoken]').value
-                // var csrf_backonwork = document.querySelector('meta[name="csrf-token"]').content;
-                // var csrf_backonwork = document.getElementsByName('csrfmiddlewaretoken').value;
-                // console.log(csrf_backonwork)
+               
                 fetch(`${user_id}/is_onwork`,
                        {method:'DELETE',
                         body:JSON.stringify({id:stat_id,leave:false}),
@@ -144,8 +146,8 @@ function sidebar_profile(){
                           }))
                }
                }
-          else{
-      //  }})
+  else{
+   
       
        e.preventDefault();
        e.stopPropagation();
@@ -153,9 +155,6 @@ function sidebar_profile(){
        chart.style.display='none';
        time_keeping_div.style.display='none';
        
-
-    //    leave_btn_ask.style.display='block';
-    //    leave_btn_back.style.display='block';
        leave_form.style.display='none';
        leave_btn_back.style.display='none';
        onleave.style.display='none';
@@ -210,14 +209,12 @@ function sidebar_profile(){
         onleave.style.display='none'}}
        }
 
-      }}) // if ele end
-       }
+      }}) 
+       }// END OF LEAVE FORM CODE
 
     
 
-       var leave_main= document.querySelector("#leave-main");
-       var stat=document.querySelector("#stat");
-      //  const trial=document.querySelector('#trial')
+  
       stat.onclick=()=>{chart.style.display='block';
                      leave.style.display='none'
                      time_keeping_div.style.display='none';
@@ -360,7 +357,8 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                       const apl_form_div=document.querySelector(".apl-form-div");
                                       const apl_clone_div=document.querySelector(".apl-clone-div");
                                       const clone_scroll=document.querySelector('.clone-scroll');
-                                      const h4=document.createElement('h4');
+                                      const h4=document.createElement('h8');
+                                      h4.id='h4';
                                       h4.innerHTML='EDITING APPLICATION FORM';
                                       chart.style.display='none';
                                       leave.style.display='none';
