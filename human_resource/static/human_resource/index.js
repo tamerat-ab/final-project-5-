@@ -1,15 +1,15 @@
 document.addEventListener("DOMContentLoaded", function(){
-  front_page();
+  front_page();// loads front page content
 
 
  
     }) ;
 document.addEventListener("DOMContentLoaded", function(){
-application();
+application();// loads application content
 });
 
 document.addEventListener("DOMContentLoaded", function(){
-  sidebar_profile();
+  sidebar_profile();// loads sidebar all information about profile,timekeeping,statistics 
 
   //  chatbox();
  
@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
-function front_page() {
+function front_page() //fornt page(user's login ,logout and registration page) script
+{
       console.log("front_page");
       const reg= document.querySelector('#reg');
       // const reg_block= document.querySelector('.class-reg');
@@ -39,12 +40,6 @@ function front_page() {
 
 
 function sidebar_profile(){
-//  console.log("sidebar_profile");
-//  fetch('application')
-//  .then(response=>response.json())
-//  .then(data=>{console.log(data)
-//        console.log(data['response']);});
-// sidebar char and leave 
 
        const leave_main= document.querySelector("#leave-main");
        const stat=document.querySelector("#stat");
@@ -98,7 +93,7 @@ function sidebar_profile(){
         .then(reponse=>reponse.json())
         .then(data=>{console.log(data)
       
-          if(data.length>0 && data[0]['onleave']==true)
+          if(data.length>0 && data[0]['onleave']==true)//checks whether the user is on leave or work 
             { 
               const leave_status= data[0]['onleave'] 
               const date=data[0]['date']  
@@ -131,7 +126,7 @@ function sidebar_profile(){
                 e.stopPropagation()
                 e.preventDefault()
                
-                fetch(`${user_id}/is_onwork`,
+                fetch(`${user_id}/is_onwork`,// this deletes user's leave form from the database
                        {method:'DELETE',
                         body:JSON.stringify({id:stat_id,leave:false}),
                         // headers:{'Content-Type': 'application/json',
@@ -184,7 +179,7 @@ function sidebar_profile(){
         const leave_date=document.querySelector('.leave-period').value;
         console.log(leave_date);
         //  console.log(formLeave);
-        fetch(`${id}/is_onwork`,
+        fetch(`${id}/is_onwork`, //posts user's leave request
         {method: 'POST',
          body:JSON.stringify({reason: reason, leave_date: leave_date,date:date}),
         //  body:formLeave,
@@ -269,7 +264,7 @@ function application (){
      apl_form_div.style.display='none'
 
 
-    var dataStorage= function(){
+    var dataStorage= function(){ //this function returns all information from application form 
      const firstname=document.querySelector('#first-name').value
      console.log(firstname)
      const secondname=document.querySelector('#second-name').value
@@ -288,7 +283,7 @@ data=JSON.stringify({firstname:firstname,secondname:secondname,lastname:lastname
   
   console.log(dataStorage())
     console.log('firstname')  
-        fetch('applicant_form', 
+        fetch('applicant_form', // posts user's first application form
                     { method:'POST',
                      body:dataStorage(),
                      header:{'Content-Type': 'application/json',
@@ -321,10 +316,10 @@ data=JSON.stringify({firstname:firstname,secondname:secondname,lastname:lastname
 
 // edit application letter here
 document.addEventListener('DOMContentLoaded',()=>{
-  console.log('here is the update form')
+  
 
 const adm_id =JSON.parse(document.getElementById('user_id').textContent);    
-fetch(`${adm_id}/edit`) // this fetchs information from the server if the manager already allowed the employee to edit his profile
+fetch(`${adm_id}/edit`) // this part clone the application form and allows user to edit the previously filled form
 .then(response=>response.json())
 .then(data=>{console.log(data)
             console.log(data[0]['status'])
@@ -333,7 +328,7 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                       //  const link= "/application" 
                                       var link_url=document.createElement('div');
                                         
-                                            // this creates a link in the users account
+                                            // this creates a link in the users account whenever is the administrator permits so
                               
                                      link_url.setAttribute('class','link-a');
                                      link_url.id='link-a'
@@ -364,7 +359,7 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                       leave.style.display='none';
                                       time_keeping_div.style.display='none';
                                       apl_form_div.style.display='none'
-                                      const apl_clone=apl_form.cloneNode(true)
+                                      const apl_clone=apl_form.cloneNode(true) //clones the application form 
                                       apl_clone.id = 'apl-clone'; // convert the cloned form id to differentiate it from the original
                                       
                                       console.log(apl_clone)
@@ -408,7 +403,7 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                                      header:{'Content-Type': 'application/json',
                                                        'X-CSRFToken':csrf_update}}
                                                      )
-                                              .then(response => response.json())   //what going on here please correct the response prt
+                                              .then(response => response.json())  
                                               .then(data => {console.log(data)
 
                                       chart.style.display='block';
@@ -417,21 +412,20 @@ fetch(`${adm_id}/edit`) // this fetchs information from the server if the manage
                                       apl_form_div.style.display='none'
                                       // const apl_clone_div=document.querySelector(".apl-clone-div")
                                       apl_clone_div.style.display='none'
-                                     
+                                     window.location.reload();
                                               
                                               })}
-                                   
+                                  
                                       }
-
+                              
                                     } })     
-     
+        
       
-})
+}) // the end of application form editing
 
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function(){ // this part dynamically display all users' information on the administrator page
   console.log('new DOMContentLoaded');
-// THE BEGIN IS HERE
 
 console.log(document.getElementById('apl-clone'))
  fetch('all_users')
@@ -450,7 +444,7 @@ console.log(document.getElementById('apl-clone'))
       //   const status_leave=data2['static'][0]['onleave']
       //   const status_work=data2['static'][0]['onwork']
       //   //  }
-        const firstname=data2['applicant'][0]['firstname']
+        const firstname=data2['applicant'][0]['name']
         console.log(firstname)
         const date_hired=data2['applicant'][0]['date_hired']
         const department=data2['applicant'][0]['department']
@@ -469,7 +463,7 @@ console.log(document.getElementById('apl-clone'))
         const admin_right=document.querySelector('.admin-right')
 
         
-
+// below creates all the necessary html elements for each information provided about the user 
        const adm_dtl=document.createElement('div')
        adm_dtl.setAttribute('class', 'adm-dtl')
        const adm_first=document.createElement('div')
@@ -513,10 +507,7 @@ console.log(document.getElementById('apl-clone'))
        const adm_salary=document.createElement('div')
        adm_salary.setAttribute('class', 'adm-salary')
        adm_salary.append(document.createTextNode(`Salary ${salary}`))
-      //  const adm_edit=document.createElement('button')
-      //  adm_edit.setAttribute('data', `${id}`)
-      //  adm_edit.setAttribute('class', 'adm-edit')
-      //  adm_edit.append(document.createTextNode(text))
+     
        const canvas=document.createElement('canvas')
        canvas.setAttribute('class', 'adm-canvas')
        const adm_chrt=document.createElement('div')
@@ -528,10 +519,10 @@ console.log(document.getElementById('apl-clone'))
        adm_data.append(adm_onwork,adm_onleave,adm_salary,adm_rate,adm_hour)
        adm_second.append( adm_chrt,adm_data)
        adm_dtl.append(adm_first,adm_second)
-       admin_right.append(adm_dtl);
-       console.log(admin_right)
+       admin_right.append(adm_dtl); // appends all the users' information on the administartor page
+      
        
-       if (data2['static'].length>0){
+       if (data2['static'].length>0){ // checks wether the user is on leave or work
              const status_leave=data2['static'][0]['onleave']
            const status_work=data2['static'][0]['onwork']
             if(status_leave==true){
@@ -560,7 +551,7 @@ console.log(document.getElementById('apl-clone'))
                   status_none.setAttribute('class','status-onwork');
                   status_none.id='status-none';
                  adm_data.appendChild(status_none.appendChild(document.createTextNode('off duty now')))}
-      
+      // END OF IF ELSE STATEMENT
       const adm_edit=document.createElement('button')
       adm_edit.setAttribute('data', `${id}`)
       adm_edit.setAttribute('class', 'adm-edit')           
@@ -598,46 +589,91 @@ console.log(document.getElementById('apl-clone'))
                      .then(response=>response.json())
                      .then(data=>{console.log(data) ; permit.innerHTML='Edit'})
                  
-        // });
+   
               }
-       
-    //   console.log('permit')
-    //   const status=document.querySelector('.adm-edit')
-    //   console.log(status.innerHTML)
-    //   if (status.innerHTML=='Edit')
-    //   localStorage.setItem(`${id}`,'Editing') // store edititng status information in localStorage
-    // else{localStorage.setItem(`${id}`,'Edit')}
-      
-     
-      
+         
        }})
 
-   
+  //  A BAR CHART FOR EVERY USR'S SALARY INFORMATION 
   fetch("https://cdn.jsdelivr.net/npm/chart.js")  
   .then(  Chrt=>{ console.log(Chrt)
        
     
   const ctx = canvas
 
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-       labels:data2['date'],
-     
-      datasets: [{
-        label: 'Employee Work Progress',
-        data: data2['y_axis'],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
+  new Chart(ctx, 
+    {
+      type: 'bar', 
+      data: {
+        labels:data2['date'],
+      
+        datasets: [{
+          label: 'Salary Progress', 
+          data: data2['y_axis'],
+          
+          borderWidth: 2,
+          
+  
+          fill: true,
+          // borderColor: 'rgb(75, 192, 100)',
+          borderColor:[ 'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.3)',
+          'rgba(54, 162, 235, 0.1)',
+          'rgba(153, 102, 255, 0.8)',
+          'rgba(201, 203, 207, 0.5)'],
+  
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+          ],
+          // tension: 0.1,
+          barThickness:5,
+         
+          
+  
         }
-      }
-    }
-  });
+          ]
+      },
+  
+      options: {
+        indexAxis:'y',
+        responsive: true,
+        scales: {
+         x:{ 
+          label:'salary',
+          border:{display:true},
+         gird:{tickLength:10,
+          display:true,
+          drawBorder:true},
+          beginAtZero: true,
+          title:{display:true,
+                 text:'salary progress'}
+             },
+            y: {
+             
+               
+             
+              title:{display:true,
+                text:'Date'},
+              ticks:{align: 'end'},
+              gird:{tickLength:10,
+                    display:true},
+              beginAtZero: true,
+                grid: {
+                  offset: true
+                }
+            }
+        }
+    } 
+    } //end here
+  );
 
 
 })
@@ -654,7 +690,7 @@ console.log(document.getElementById('apl-clone'))
 
 
   // THE END IS HERE //
-  fetch("https://cdn.jsdelivr.net/npm/chart.js")  
+  fetch("https://cdn.jsdelivr.net/npm/chart.js")  // THIS CREATES SALARY RELATED INFORMATION CHART ON INDIVIDUAL USER'S PAGE
   .then(chart=>{ console.log(chart)
   //  fetch('user_stat')
   //   .then(response=>response.json())
@@ -678,32 +714,79 @@ console.log(document.getElementById('apl-clone'))
         console.log(data['date'])
   const ctx = document.getElementById('myChart')
 
-  new Chart(ctx, {
-    type: 'line', 
+  new Chart(ctx,
+     {
+    type: 'bar', 
     data: {
       labels:data['date'],
     
       datasets: [{
-        label: 'Progress', 
+        label: 'Salary Progress', 
         data: data['y_axis'],
-        borderWidth: 1,
+        
+        borderWidth: 2,
+        
 
         fill: true,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
+        // borderColor: 'rgb(75, 192, 100)',
+        borderColor:[ 'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.3)',
+        'rgba(54, 162, 235, 0.1)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(201, 203, 207, 0.5)'],
+
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        // tension: 0.1,
+        barThickness:5,
+       
+        
 
       }
         ]
     },
 
     options: {
+      indexAxis:'y',
+      responsive: true,
       scales: {
-        y: {
-          beginAtZero: true
-        }
+       x:{ 
+        label:'salary',
+        border:{display:true},
+       gird:{tickLength:10,
+        display:true,
+        drawBorder:true},
+       
+        title:{display:true,
+               text:'salary progress'}
+           },
+          y: {
+           
+             
+           
+            title:{display:true,
+              text:'Date'},
+            ticks:{align: 'end'},
+            gird:{tickLength:10,
+                  display:true},
+            beginAtZero: true,
+              grid: {
+                offset: true
+              }
+          }
       }
-    }
-  });
+  } 
+  } //end here
+  );
 
 })
 // 
@@ -728,7 +811,7 @@ function all_users(){
    {
     
     // creates variables for each inforamtion of the users
-      const username=data[i]['name']; const id=data[i]['id']; const firstname=data[i]['firstname'];
+      const username=data[i]['name']; const id=data[i]['id']; const firstname=data[i]['name'];
       const lastname=data[i]['lastname']; const dep=data[i]['department']; const date_hired=data[i]['date_hired'];
       const job_title=data[i]['job_title']; const profile_picture=data[i]['profile_picture'];const salary=data[i]['salary'];
       const userid=data[i]['user_id'];const avatar=data[i]['avatar'];
@@ -736,7 +819,8 @@ function all_users(){
       const dtl_id = JSON.parse(document.getElementById('user_id').textContent);
      console.log(profile_picture);
 
-     if(dtl_id !=userid)  {
+     if(dtl_id !=userid)// CHECKS THE USER ID WITH THE FETHED ID 
+       { 
                         //creates small profile about individual users
                           const chat_img = document.createElement('img');
                           chat_img.setAttribute('id',`userid${userid}`);
@@ -786,7 +870,7 @@ function all_users(){
   // const chat_submit=document.querySelector('.chat-submit');
   // chat_submit.disabled = true;
 
-  dtl_btn.forEach(dtl_btn=>{dtl_btn.onclick=(e)=>{
+  dtl_btn.forEach(dtl_btn=>{dtl_btn.onclick=(e)=>{// ON CLICK DISPLAYS INDIVIDUAL MESSAGEING BOX WITH MESSAGEING HISTORY 
           e.stopPropagation();
           e.preventDefault();
           
@@ -808,10 +892,10 @@ function all_users(){
       else{ chat_submit.disabled = true}
       
       
-      // chat_submit.disabled=false;
+     
       }
 
-    fetch(`${id}/message`)
+    fetch(`${id}/message`)// FETCH INDIVIDUAL MESSAGE HISTORYS AND ENDBLES USERS TO EXCHANGE TEXT MESSAGES
     .then(response=>response.json())
     .then(data=>{console.log(data)
           console.log(id)
@@ -892,10 +976,10 @@ function all_users(){
         const chat_csrf=document.querySelector('[name=csrfmiddlewaretoken]').value
         console.log(chat_csrf);
         console.log(chat_submit)
-      chat_submit.onclick = function(e){
+      chat_submit.onclick = function(e){ // CLONES MESSAGE BOX ELEMENT FOR EACH USER AND  UPDATE THE CHAT HISTORY IN THE INDIVIDUAL CHAT BOX
         e.preventDefault();
         e.stopPropagation();
-        // chat_submit.disabled = true;
+      
         const message=document.querySelector('.chat-textarea').value;
         
         console.log(message);
@@ -957,7 +1041,7 @@ function all_users(){
     scrol.scrollTop =scrol.scrollHeight  
     const text=document.querySelector('.chat-textarea') 
     console.log(text)
-    text.value = '' 
+    text.value = ''  // IT UPDATES THE USER'S MESSAGE HISTORY EVERY TIME A TEXT MESSAGE IS POSTED 
     document.querySelector('.chat-submit').disabled = true
                 } )
                   
@@ -974,7 +1058,7 @@ function all_users(){
 
 
   
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded',function(){// THIS PART FETCHS USER'S PROFILE PICTURE,ALSO UPDATE USER PROFILE PICTURE
   console.log('new DOMContentLoaded');
 fetch('new_picture')
 .then(response => response.json())
@@ -998,7 +1082,7 @@ fetch('new_picture')
                 const update_pic=document.querySelector('.update-pic');
                 update_pic.onclick=(e)=>{
                   e.preventDefault();
-                  e.stopPropagation()
+                  // e.stopPropagation()
                   const update_pic_div=document.querySelector('.update-pic-div');
                   update_pic_div.style.display='block'
                   update_pic.style.display='none';
@@ -1006,7 +1090,7 @@ fetch('new_picture')
                 const sbt_newphoto=document.querySelector('.sbt-newphoto')
                 sbt_newphoto.onsubmit=(e)=>{
                   e.preventDefault();
-                  e.stopPropagation(); 
+                  // e.stopPropagation(); 
                   update_pic_div.style.display='none'
                   update_pic.style.display='block'}
 
@@ -1025,7 +1109,7 @@ fetch('new_picture')
 
 
 
-function save() {   
+function save() {   // THIS PART UPDATES USER'S WORK OR LEAVE STATUS   ON EACH USER'S PAGE
   var checkbox = document.getElementById("ck1");
   localStorage.setItem("ck1", JSON.stringify(checkbox.checked));  
 }
@@ -1116,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // set rate here/
 
-document.addEventListener('DOMContentLoaded',function() {
+document.addEventListener('DOMContentLoaded',function() {// THIS PART POSTS  NEW WAGE RATE FOR EVERY USER
 console.log('rate')
 
   const dj_submit=document.querySelector('.dj-submit');
@@ -1149,14 +1233,14 @@ console.log('rate')
   // return false;
 });
 
-document.addEventListener('DOMContentLoaded',()=>{
-fetch('new_picture')
-.then(response => response.json())
-.then(data=>{console.log(data)})
-});
+// document.addEventListener('DOMContentLoaded',()=>{
+// fetch('new_picture')
+// .then(response => response.json())
+// .then(data=>{console.log(data)})
+// });
 
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',()=>{// UPDATES USEER'S WAGE RATE
   console.log('whereis rate')
 
   const new_from=document.querySelector('.new-form')
@@ -1174,242 +1258,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     .then(response=>response.json())
     .then(data=>{console.log(data)
     
-    
+    window.location.reload()
     })
-  //  window.location.reload()
+  
 
   }
 });
-
-document.addEventListener('DOMContentLoaded',()=>{
-  console.log('document')
-//   const permit=document.querySelectorAll('.adm-edit')
-//   // const permit=document.querySelector('.adm-edit')
-//   console.log(permit)
-// permit.forEach(permit=>{permit.onclick=(e)=>{
-//   console.log('permit')
-//   e.preventDefault();
-//   e.stopPropagation();
-//   console.log('permit')
-//   const id=e.target.getAttribute('data')
-//   if(e.target.innerHTML=='perit Edit'){
-
-//     fetch(`${id}/edit`,{
-//       method: 'UPDATE',body:JSON.stringify({ is_alloed:true})})
-//       .then(response=>response.json())
-//       .then(data=>{console.log(data)
-//             permit.innerHTML='Edited'})}
-
-//   else if (e.target.innerHTML=='Edited'){
-//     fetch(`${id}/edit`,{
-//            method: 'UPDATE',body:JSON.stringify({ is_alloed:false})
-//            .then(response=>response.json())
-//            .then(data=>{console.log(data)
-//             permit.innerHTML='pemit Edit'})
-//     });
-//   }
-   
-//       }})
-
-    })
-//   }
-// }})
-// });
-// document.addEventListener('DOMContentLoaded',()=>{
-//    fetch('edit')
-//    .then(response=>response.json())
-//    .then(data=>{console.log(data)
-//     if(data['response']==true){
-//      const link='{% url "application" %}'
-//      const update=document.querySelector('.update');
-//      update.append(document.createTextNode(link))
-//      update.onclick=()=>{
-//       const apl_form=document.querySelector('#apl-form');
-//       const apl_form_div=document.querySelector('.apl-form-div');
-//       apl_form.style.display='none';
-//       const apl_clone=apl_form.cloneNode(true);
-//       apl_form_div.append(apl_clone)
-//       }
-
-//     }
-//   })
-
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   // async()=>{
-      //   try { await fetch('applicant_form', 
-      //               { method:'POST',
-      //                body:data,
-      //                header:{'Content-Type': 'multipart/form-data',
-      //                  'X-CSRFToken':csrftoken2}}
-      //                )
-      //         .then(response => response(json))
-      //         .then(data => {console.log(data)})
-      //               // return await data_response.json();
-      //              }
-      //              catch(err){console.error(err);}
-           
-      //  }
-// document.addEventListener("DOMContentLoaded", function(){           
-// // function new_picture(){
-//   const div_upld=document.querySelector("#div-upld");
-//   console.log(div_upld);
-//   const form=document.querySelector("#form-upld");
-//   console.log(form)
-//   const csrftoken_upld=document.querySelector('[name=csrfmiddlewaretoken]').value;
-//   console.log(csrftoken_upld)
-//   const sub_upld=document.querySelector("#sub-upld");
-//   form.style.display='none';
-//   div_upld.onclick=(e)=>{
-//      e.preventDefault();
-//     e.stopPropagation();
-//     // const form_upld=document.getElementById("form-upld");
-  
-//     // if(form_upld.style.display=='none'){
-//       form.style.display='block';
-      
-//       sub_upld.onclick=(e)=>{
-       
-//          e.stopPropagation()
-//          e.preventDefault()
-       
-//         const img_id = JSON.parse(document.getElementById('user_id').textContent);
-//         console.log(img_id)
-    
-        
-        
-//         // const newpic=document.getElementById("newpic").files[0].name;
-//          const newpic=document.getElementById("newpic").value;
-//         const csrftoken_upld=document.querySelector('[name=csrfmiddlewaretoken]').value;
-      
-//         const form=document.getElementById("form-upld");
-//         //  var newupd=new FormData(document.querySelector('#form-upld'));
-//         console.log(form)
-//         var formdata = new FormData(form);  
-
-        
-       
-//          console.log(formdata);
-//         // for (var [key, value] of formData.entries()) { 
-//         //   console.log(key, value);}
-//         console.log(newpic)
-      
-//         console.log(csrftoken_upld)
-//          fetch(`${img_id}/new_picture`,
-      
-//               {method:'UPDATE',
-//                body:{"data":newpic},
-//               //  body:JSON.stringify({newpic:newpic}),
-//                headers:{'Content-Type':'multipart/form-data',
-//                          'X-CSRFToken':csrftoken_upld}})
-//                .then(response => response.json())
-//                .then(data=>{console.log(data)
-//                 // const img=data[2]['avatar'];
-//                 // console.log('where is the img')
-//                 // console.log(img)
-//                 // const div_upld=document.querySelector('#div-upld');
-//                 // const img_div = document.createElement('img');
-//                 // img.id='img-div';
-//                 // img_div.setAttribute('src',`${img}`)
-//                 // console.log(img_div)
-//                 // div_upld.appendChild(img_div)
-
-//               })
-//        form.style.display='none';
-//       //  const div_upld=document.querySelector('#div-upld');
-//       //  const img_div = document.createElement('img');
-//       //  img.id='img-div';
-//       //  img_div.setAttribute('src',)
-
-
-//       }
-//     // }
- 
-// }           
-// })   
-
-
-                                
-      // // console.log(link_url)
-      // const link_url=document.querySelector('.link-a');
-      // console.log(link_url);
-      // link_url.onclick=(e)=>{ //here begins
-      //               e.preventDefault();
-      //               e.stopPropagation();
-      //               console.log(e.target)
-      //               const apl_form=document.querySelector('#apl-form');
-      //               console.log(apl_form)
-      //               const apl_form_div=document.querySelector('.apl-form-div');
-                    
-      //               const apl_clone=apl_form.cloneNode(true);
-      //               console.log(apl_clone)
-      //               apl_form_div.append(apl_clone)
-      //               const submit_btn_apl=document.querySelector('.submit-btn-apl');
-      //               data()
-      //               print(data());
-      //               const csrfedit=document.querySelector('[name="csrfmiddlewaretoken"]').value;
-      //               submit_btn_apl.onclick=function(){
-      //                 fetch('applicant_from',{method: 'UPDATE', body: data(),
-      //                       headers: {'Content-Type': 'application/json', 'X-CSRFToken':csrfedit}})
-      //                       .then(response=response.json())
-      //                       .then(data=>{console.log(data)
-      //                       const adm_id =JSON.parse(document.getElementById('user_id').textContent); 
-      //                             fetch(`${adm_id}/edit`,{method: 'UPDATE', body:JSON.stringify({'is_allowed': 'false'})}) }) 
-      //               }
-                
-                
-      //               } // endes
-
-
-       // console.log(scrol(data))
-                // const scrol=scroll.cloneNode(true);
-            
-              // for(let i=0; i<data.length; i++){
-              // //   console.log(scroll);
-              // // console.log( scroll.querySelector('#reciever-img'));
-              // const reciever=data['msgs'][i]['reciever']
-              // const sender_id=data['msgs'][i]['sender_id']
-              // const msg=data['msgs'][i]['msg']
-              // const time=data['msgs'][i]['time']
-              // console.log(reciever)
-              // console.log(data['msgs'][i]['sender'])
-              // console.log(id)
-              // const main_sender=data['msgs'][i]['sender']
-              // console.log(main_sender)
-              // const main_reciever=data['msgs'][i]['reciever']
-              // console.log(main_reciever)
-
-              // scrol.querySelector('#reciever-img').setAttribute('scr',main_reciever.picture)
-              // if( scrol.querySelector('#sender-img')){
-              // scrol.querySelector('#sender-img').setAttribute('scr',main_sender.picture)}
-              // scroll.querySelector('#reciever-msg').innerHTML=main_reciever.msg
-              // if( scrol.querySelector('#sender-msg')){
-              // scrol.querySelector('#sender-msg')=main_sender.msg}
-              // scrol.querySelector('#time-left').innerHTML=main_reciever.time
-              // // scroll.querySelector('#time-right').innerHTML=main_sender.time
-              // console.log(scrol)
-              // // scroll.querySelector('#sender-img').innerHTML=main_sender.picture
-              // // scroll.querySelector('#sender-img').innerHTML=main_sender.picture
-              // // scroll.querySelector('#sender-img').innerHTML=main_sender.picture
-              // }
-             

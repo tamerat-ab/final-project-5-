@@ -64,7 +64,7 @@ class Applicant_form(models.Model):
 
 class User_stat (models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    hour=models.IntegerField(null=True, blank=True,default=0)
+    hour=models.FloatField(null=True, blank=True,default=0)
     date=models.DateTimeField(auto_now=True,null=True, blank=True)
     rate=models.IntegerField(null=True, blank=True, default=15)
     reason=models.CharField( max_length=1000,  null=True, blank=True)
@@ -74,8 +74,10 @@ class User_stat (models.Model):
 
     def serialize(self):
         return { 'user': self.user.username,
+                #  'hour': round(self.hour,4),
                  'hour': self.hour,
-                 'date': self.date.strftime('%d %b %Y %H:%M:%S'),
+                #  'date': self.date.strftime('%d %b %Y %H:%M:%S'),
+                 'date': self.date.strftime('%d %b %Y '),
                  'y_axis': self.rate*self.hour if self.rate and self.hour is not None else 0,
                  'reason':self.reason,
                  'leave_date': self.leave_date,
@@ -88,7 +90,7 @@ class wage_rate (models.Model):
     last_updated=models.DateTimeField(auto_now=True,null=True, blank=True)
  
     def serialize(self):
-       return{'user':self.user.username,'rate':self.rate,'last_updated':self.last_updated}
+       return{'user':self.user.username,'rate':self.rate,'last_updated':self.last_updated.strftime('%d %b %Y')}
 
 class Message(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
