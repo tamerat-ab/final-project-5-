@@ -20,24 +20,17 @@ from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
 from dateutil import parser #helps to parse string format date in datetime format
 import pytz
-utc=pytz.UTC #the above two modules modulate the datetime naive and datetime aware issues
+# utc=pytz.UTC #the above two modules modulate the datetime naive and datetime aware issues
 eu_zone=pytz.timezone('Europe/Berlin')
 
-# from PIL import Image
-# from io import BytesIO
-# import base64
+
 
 
 def front_page(request):
     return render( request,'human_resource/front_page.html')
 def user_register(request):
     if request.method=='POST':
-        # data=json.loads(request.body)
-        # username=data.get('user_reg')
-        # password1=data.get('password_reg')
-        # password2=data.get('confirm_reg')
-        # email=data.get('email_reg')
-        
+     
         username=request.POST.get('username')
         password1=request.POST.get('password1')
         password2=request.POST.get('confirm')
@@ -52,15 +45,15 @@ def user_register(request):
                 
                     user=User.objects.create_user(email=email, username=username, password=password1,first_name=first_name,last_name=last_name)
                     user.save()
-                    # return render(request,'human_resource/front_page.html',{'message':user})
+                   
             except IntegrityError:
                 return render(request,'human_resource/front_page.html',{'message':'user already exists'})
         login(request,user)
         return HttpResponseRedirect(reverse("index"))
-        # return HttpResponseRedirect(reverse("index"))
+     
         
 
-def user_login(request):
+def user_login(request):# user login
     if request.method == "POST":
        
         username = request.POST.get('username')
@@ -87,14 +80,13 @@ def user_logout(request):
     logout(request) 
     return HttpResponseRedirect(reverse("front_page"))
 
-def index(request):
-    # if request.method =='GET':
+def index(request): #returns all the user's information on index page
+  
     all_users=User.objects.all()
 
-    # return JsonResponse([user.serialize()for user in all_users], safe=False,status=200)
     return render(request, 'human_resource/index.html')
 
-def application(request):
+def application(request):# returns all information regarding the user filled up during first registration
     user=request.user
     if Applicant_form.objects.filter(user=user).exists():
       return JsonResponse({'response':True})
@@ -102,7 +94,7 @@ def application(request):
         return JsonResponse({'response':False})
 
 @csrf_exempt
-def applicant_form(request): 
+def applicant_form(request): # saves information about the user during first registration
     user=request.user
     if request.method=='GET':
         applicantForm=Applicant_form.objects.filter(user=user)
@@ -139,11 +131,11 @@ def applicant_form(request):
                                                      
                                                         profile_picture=picture)
         applicant_form.save()
-        isUpdate=Edit(user=user,is_allowed=False)
+        isUpdate=Edit(user=user,is_allowed=False)# checks weather the user already filled up an application form
         isUpdate.save()
         return HttpResponseRedirect(reverse("index"))
     
-    if request.method == 'UPDATE':  
+    if request.method == 'UPDATE':  #updates users' information whenever is required
         data=json.loads(request.body)
    
            
@@ -159,7 +151,7 @@ def applicant_form(request):
         work=data.get('work')
         salary=data.get('salary')
         document=data.get('document')
-        picture=data.get('picture')
+        # picture=data.get('picture')
 
         update=Applicant_form.objects.get(user=user)
         update.firstname=firstname
@@ -170,7 +162,7 @@ def applicant_form(request):
         update.salary=salary
         update.date_hired=hiredate
         update.experience=work
-        update.profile_picture=picture
+        # update.profile_picture=picture
         update.save()
         isUpdate=Edit.objects.get(user=user)
         isUpdate.is_allowed=False
@@ -179,18 +171,8 @@ def applicant_form(request):
 
         return JsonResponse([applicant_form.serializer() for applicant_form in newupdate],safe=False)
        
-       
-   
-    
-
-
-
-def users_stat(request): 
-    stats=User_stat.objects.all()
-    return JsonResponse({'year':stats})
-
 csrf_exempt
-def new_picture(request):
+def new_picture(request):# uploads user's profile picture
     user=request.user 
     context={}
     if request.method == 'POST':
@@ -217,7 +199,7 @@ def new_picture(request):
                 applicant.profile_picture=img
                 applicant.save()
                
-                # return JsonResponse({'photo':'UPLOADED'})
+               
     else:
        
         form=ImageForm()
@@ -226,14 +208,14 @@ def new_picture(request):
         return JsonResponse([img.serialize() for img in mg],safe=False)
     context['form']=form
     mg=Img.objects.filter(user=user)
-    # print(mg)
+   
     newOne=json.loads(serialize("json",mg))
    
     return render(request,'human_resource/index.html',context)
   
 
 @csrf_exempt   
-def message(request,rec_id):
+def message(request,rec_id):# save and retrieve the messages a user exchanged
     user=request.user
     msg_end=User.objects.get(id=rec_id)
 
@@ -277,9 +259,9 @@ def message(request,rec_id):
                 newlist_2.append(n)
         newlist_2
        
-        # return JsonResponse({'msgs':msgs})
+      
         return JsonResponse({'msgs':newlist_2,'count':real_count})
-        # return JsonResponse({'message':'sucess'}, safe=False)
+       
 
     if request.method =='GET':
       
@@ -310,10 +292,10 @@ def message(request,rec_id):
                 newlist_2.append(n)
         newlist_2
        
-        # return JsonResponse({'msgs':msgs})
+      
         return JsonResponse({'msgs':newlist_2,'count':real_count})
 @csrf_exempt
-def stat(request,user_id):
+def stat(request,user_id): #returns all the user's information 
     user=request.user
     users=User.objects.get(id=user_id)
     stat=User_stat.objects.filter(user=users)
@@ -327,16 +309,17 @@ def stat(request,user_id):
     ser=[user_stat.serialize() for user_stat in stat]
     for i in range(len(ser)):
         val_y= ser[i]['y_axis']
-        total_salary+=int(ser[i]['y_axis'])
+        total_salary+=float(ser[i]['y_axis'])
         # salary.append(total_salary)
-        total_hours+=int(ser[i]['hour'])
+        total_hours+=float(ser[i]['hour'])
         # hours.append(total_hours)
         val_date=ser[i]['date']
         data_y.append(val_y)
         data_date.append(val_date)
     data_y
     data_date
-    total_salary
+    total_salary=float(round(float(total_salary),4))
+    total_hours=float(round((total_hours),4))
     # hours=hours.append(total_hours)
     # salary=salary.append(total_salary)
     static=list(User_stat.objects.filter(user=users).order_by('-id')[:1])
@@ -358,15 +341,15 @@ def stat(request,user_id):
     return JsonResponse({'edit':edited,'date':data_date,'y_axis':data_y,'static':static,'salary':total_salary, 'hours':total_hours,'wage':wage,'applicant':applicant,'user_img':user_img})
     
 @csrf_exempt
-def is_onwork(request,user_id):
+def is_onwork(request,user_id):# checks and register the total hours the user is at work ; informs when the user is at work or not ,leave form etc.
    
     year=datetime.now().year
     month=datetime.now().month
     day=datetime.now().day
     #    in case the user forgot to leave the javascript should count time and fetch the onleave data ------dont 
-    time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').replace(tzinfo=eu_zone)
+    time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').astimezone(eu_zone)
             #    time_end = datetime.fromisoformat(f'{year}-{month}-{day} 17:30:00')
-    time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').replace(tzinfo=eu_zone)
+    time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').astimezone(eu_zone)
 
     user = request.user
 
@@ -406,38 +389,41 @@ def is_onwork(request,user_id):
 
         stat=User_stat.objects.filter(user=user).order_by('-id').first()
        
-        print(datetime.now().replace(tzinfo=eu_zone))
+        print(datetime.now().astimezone(eu_zone))
         #    stat=[user_stat.serialize() for user_stat in stat_filter] 
         if stat:
             onleave=stat.is_onleave
             last_date=stat.date
-            print(last_date.replace(tzinfo=eu_zone))
+            print(f' first{last_date.replace(tzinfo=eu_zone)}')
+            print(f"second{last_date.astimezone(eu_zone)}")
             last_hour=stat.hour
             year=datetime.now().year
             month=datetime.now().month
             day=datetime.now().day
             #    time_begin = datetime.fromisoformat(f'{year}-{month}-{day} 08:00:00, '%Y-%m-%dT%H:%M:%S.%f') 
-            time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').replace(tzinfo=eu_zone)
+            time_begin = parser.parse(f'{year}-{month}-{day} 08:00:00').astimezone(eu_zone)
             #    time_end = datetime.fromisoformat(f'{year}-{month}-{day} 17:30:00')
-            time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').replace(tzinfo=eu_zone)
+            time_end = parser.parse(f'{year}-{month}-{day} 17:30:00').astimezone(eu_zone)
         
         
 
             if last_date and (time_begin < last_date < time_end) and ( onleave==False):
                         # if onleave==False and request.post.get('is_onleave')==True:
 
-                            if (time_begin.replace(tzinfo=eu_zone) < datetime.now().replace(tzinfo=eu_zone) < time_end.replace(tzinfo=eu_zone)):
+                            if (time_begin.astimezone(eu_zone) < datetime.now().astimezone(eu_zone) < time_end.astimezone(eu_zone)):
                                 if is_onwork==False and is_onleave==False:
                                     # if last_date.strftime('%d %b %y')==datetime.now().strftime('%d %b %y'):
                                 
                                     # hr=int(datetime.now().strftime("%H:%M"))-int(last_date.strftime("%H:%M"))
-                                    diff_hour=(datetime.now().replace(tzinfo=eu_zone))-(last_date.replace(tzinfo=eu_zone))    
+                                    diff_hour=(datetime.now().astimezone(eu_zone))-(last_date.astimezone(eu_zone))    
                                     # hr=str(diff_hour.strftime("%H:%M"))
                                     hr=str(diff_hour)
+                                    print(f'hr:{hr}')
                                     hr=hr.split(':')
                                     totaltime=int(hr[0])+(int(hr[1])/60)
-                                    print(f'lasthour:{totaltime} lastdatetime:{last_date} now:{datetime.now()}')
+                                    # print(f'totaltime:{totaltime} last_date:{last_date.astimezone(eu_zone)} now:{datetime.now()}')
                                     hour=last_hour +totaltime
+                                    print(f' hour:{hour},totaltime:{totaltime} last_date:{last_date.astimezone(eu_zone)} now:{datetime.now()}')
                                     # hour=totaltime
                                     # user_stat=User_stat( user=user,date=date,hour=hour,is_onleave=False,is_onwork=False,rate=rate)
                                     stat.hour=hour
@@ -458,19 +444,19 @@ def is_onwork(request,user_id):
                                     return JsonResponse({"response":'YOU ARE BACK ON WORK FROM BREAK'})
                                 #    user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True)
                             else: # DOUBLE CHECK ON HERE AVOID REDUDUNCY 
-                                # user_stat=User_stat(user=user,date=date,hour=0,is_onleave=False, is_onwork=True, rate=rate)
+                                
                                 return JsonResponse({'response':'NOW IS NOT WORKING HOUR','workhour':False})
                           
             # elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=utc) < time_end.replace(tzinfo=utc)) and (onleave==False )and ( last_date.replace(tzinfo=utc)>time_begin.replace(tzinfo=utc) and last_date.replace(tzinfo=utc)>time_end.replace(tzinfo=utc)):
-            elif (time_begin.replace(tzinfo=eu_zone) < datetime.now().replace(tzinfo=eu_zone) < time_end.replace(tzinfo=eu_zone)) and (onleave==False )and ( last_date.replace(tzinfo=eu_zone)<time_begin.replace(tzinfo=eu_zone) ):
+            elif (time_begin.astimezone(eu_zone) < datetime.now().astimezone(eu_zone) < time_end.astimezone(eu_zone)) and (onleave==False )and ( last_date.astimezone(eu_zone)<time_begin.astimezone(eu_zone) ):
                     user_stat=User_stat(user=user,date=datetime.now,hour=0,is_onleave=False, is_onwork=True, rate=rate)
                     # return JsonResponse({'response':user_stat})
                     return JsonResponse({'response':'WELCOME BACK'})
-            elif (datetime.now().replace(tzinfo=eu_zone) > time_end.replace(tzinfo=eu_zone)) and (onleave==False ):
+            elif (datetime.now().astimezone(eu_zone) > time_end.astimezone(eu_zone)) and (onleave==False ):
                 return JsonResponse({'response':'THIS IS NOT A WORKING HOUR'})
             else:
                  return JsonResponse({'response':'YOU ARE ON LEAVE NOW'})
-        elif (time_begin.replace(tzinfo=utc) < datetime.now().replace(tzinfo=eu_zone) < time_end.replace(tzinfo=eu_zone)):
+        elif (time_begin.astimezone(eu_zone) < datetime.now().astimezone(eu_zone) < time_end.astimezone(eu_zone)):
             if is_onwork==True and is_onleave==False:
                 work_start=User_stat(is_onwork=True,is_onleave=False,hour=0,rate=rate,user=user)
                 work_start.save()
@@ -480,7 +466,7 @@ def is_onwork(request,user_id):
 
    
    
-    if request.method == 'DELETE':
+    if request.method == 'DELETE': #deletes the user's leave request form when the user gets back to work
         data=json.loads(request.body)
         id=data.get('id')
         leave=data.get('leave')
@@ -494,22 +480,18 @@ def is_onwork(request,user_id):
         return JsonResponse({'response':'you are on work now'})
 @csrf_exempt
 @login_required
-def all_users(request):
+def all_users(request):# returns information provided during user's registration 
     user=request.user
     form=Applicant_form.objects.all()
    
     return JsonResponse([applicant_form.serializer() for applicant_form in form], safe=False)
   
-
-    # return JsonResponse([user.serialize()for user in all_users], safe=False,status=200)
-
-
 @csrf_exempt
-def admin_user(request):
+def admin_user(request): # for admin user/ a manager page
     return render(request, 'human_resource/admin_user.html') 
     
 @csrf_exempt
-def set_rate(request):
+def set_rate(request): # resets wage rate for every users/employees
     user=request.user
     if request.method=='GET':
         wage=wage_rate.objects.get(user=user)
@@ -522,7 +504,6 @@ def set_rate(request):
         static=wage_rate.objects.all()  
         print(static)
        
-        # if static.exists():
         try:
             users=User.objects.all()
             print(users)
@@ -541,7 +522,7 @@ def set_rate(request):
             return JsonResponse({'response':'error rate setting'})
       
 
-def edit(request,id):
+def edit(request,id): # the manager/adminstrator is able to provide permission to users whenever is editing a profile required
     user=request.user
     if request.method =='UPDATE':
         target_user=User.objects.get(id=id)
@@ -573,17 +554,7 @@ def edit(request,id):
 
 
 
-# def form(request):
-    # user=request.user
-    # form=Applicant_form.objects.all()
-    # appplicants=[]
-    # # users=User.objects.all()
-    # # for applicants in users:
-    # #     form=Applicant_form.objects.get(user=applicants)
-    # # ser=[applicant_form.serialize() for applicant_form in form]
-    # #     applicants.append(ser)
-    # # applicants
-    # return JsonResponse([applicant_form.serializer() for applicant_form in form], safe=False)
+
  
 
 

@@ -17,7 +17,7 @@
             <form class="newphoto" method="POST" action="{% url 'new_picture' %}" enctype="multipart/form-data">
               {% csrf_token %}
               {{ form.photo }}
-              <input class="sbt-newphoto" type="submit" value="Upload">
+              <input class="sbt-newphoto"  type="submit" value="Upload">
             </form>
 
       </div>
@@ -127,7 +127,7 @@
   <div class="total-salary">Total Salary Scored: </div>
   <div class="wage-rate">Current Wage-Rate: </div>
   <div class="wage-update">last updated wage-rate: </div>
-  <div class="leave-cond"></div>
+  <!-- <div class="leave-cond"></div> -->
 
   
 
