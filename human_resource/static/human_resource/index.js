@@ -119,8 +119,8 @@ function sidebar_profile(){
              const text=`you are on leave now for ${leave_date} days since ${date} for the reason
                specified as  "${reason}", if you would like to return to work please click below`;
                onleave_show.innerHTML=text;
-               const leave_cond= document.querySelector('.leave-cond')
-               leave_cond.append(text);
+              //  const leave_cond= document.querySelector('.leave-cond')
+              //  leave_cond.append(text);
                const back_onwork_btn=document.querySelector('.leave-btn-back');
                 back_onwork_btn.onclick=(e)=>{
                 e.stopPropagation()
@@ -157,8 +157,8 @@ function sidebar_profile(){
 
 
       leave_btn_ask.onclick=()=>{
-        // e.stopPropagation();
-        // e.preventDefault();
+        e.stopPropagation();
+        e.preventDefault();
        const leave_form_submit=document.querySelector('#leave-form-submit');
        console.log(leave_form_submit);
         leave_form.style.display='block'
@@ -197,11 +197,16 @@ function sidebar_profile(){
         chart.style.display='none';
         leave_form.style.display='none'
         leave_btn_back.style.display='block'
-      
+        console.log('leave_btn_back');
         leave_btn_back.onclick=()=>{
+          console.log('hello');
         leave_btn_ask.style.display='block';
         leave_btn_back.style.display='none';
-        onleave.style.display='none'}}
+        onleave.style.display='none'
+        document.querySelector('.time-keeping-div').style.display='block'
+        document.querySelector('#slide-div').style.display='block'
+
+      }}
        }
 
       }}) 
